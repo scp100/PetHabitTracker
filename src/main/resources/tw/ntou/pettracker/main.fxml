@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="tw.ntou.pettracker.MainController">
+  <children>
+    <BorderPane>
+      <top>
+        <HBox fx:id="inputBar" spacing="8">
+          <padding>
+              <Insets top="10" right="10" bottom="10" left="10"/>
+          </padding>
+          <children>
+            <TextField fx:id="descField" promptText="輸入任務描述…"/>
+            <DatePicker fx:id="datePicker"/>
+            <ComboBox fx:id="prioBox"/>
+            <Button text="新增" onAction="#onAddTask"/>
+          </children>
+        </HBox>
+      </top>
+      <center>
+        <TableView fx:id="table" editable="true">
+          <columns>
+            <TableColumn fx:id="doneCol" text="完成" prefWidth="60"/>
+            <TableColumn fx:id="descCol" text="描述" prefWidth="200"/>
+            <TableColumn fx:id="dateCol" text="到期日" prefWidth="120"/>
+            <TableColumn fx:id="prioCol" text="優先級" prefWidth="80"/>
+          </columns>
+        </TableView>
+      </center>
+    </BorderPane>
+    <Button fx:id="plusBtn" text="+"
+            styleClass="fab"
+            onAction="#onShowInput"
+            StackPane.alignment="BOTTOM_LEFT">
+      <StackPane.margin>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+      </StackPane.margin>
+    </Button>
+  </children>
+</StackPane>

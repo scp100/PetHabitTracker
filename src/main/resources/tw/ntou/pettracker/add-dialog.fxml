@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.*?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tw.ntou.pettracker.DialogController"
+      spacing="10" stylesheets="@style.css" styleClass="add-form">
+    <Label text="新增任務" styleClass="dialog-title"/>
+    <TextField fx:id="descField" promptText="描述…"/>
+    <DatePicker fx:id="datePicker"/>
+    <ComboBox fx:id="prioBox"/>
+    <HBox spacing="10">
+        <CheckBox fx:id="remindCheck" text="提醒"/>
+        <DatePicker fx:id="remindPicker"/>
+    </HBox>
+    <TextField fx:id="tagsField" promptText="標籤…"/>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="取消" onAction="#onCancel"/>
+        <Button fx:id="submitBtn" text="提交" onAction="#onSubmit"/>
+    </HBox>
+</VBox>
