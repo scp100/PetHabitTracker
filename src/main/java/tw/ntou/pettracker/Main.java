@@ -19,11 +19,13 @@ public class Main extends Application {
             scene.getStylesheets().add(
                 getClass().getResource("style.css").toExternalForm());
 
+            MainController controller = loader.getController();
+            primaryStage.setOnCloseRequest(e -> Persistence.saveTasks(controller.getTaskList()));
+
             primaryStage.setScene(scene);
             primaryStage.setTitle("PetHabitTracker – To-Do List");
             primaryStage.show();
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }

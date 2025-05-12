@@ -36,6 +36,8 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        tasks.addAll(Persistence.loadTasks()); // 載入 json
+
         inputBar.setVisible(false);
         inputBar.setManaged(false);
         datePicker.setValue(LocalDate.now());
@@ -97,5 +99,9 @@ public class MainController implements Initializable {
             prioBox.getSelectionModel().select(2);
             onShowInput();
         }
+    }
+
+    public ObservableList<Task> getTaskList() {
+        return tasks;
     }
 }
