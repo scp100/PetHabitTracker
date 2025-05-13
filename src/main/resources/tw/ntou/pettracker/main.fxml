@@ -46,6 +46,7 @@
             <TableColumn fx:id="descCol" text="描述" prefWidth="200"/>
             <TableColumn fx:id="dateCol" text="到期日" prefWidth="120"/>
             <TableColumn fx:id="prioCol" text="優先級" prefWidth="80"/>
+            <TableColumn fx:id="deleteCol" text="" prefWidth="60"/>
           </columns>
         </TableView>
       </center>

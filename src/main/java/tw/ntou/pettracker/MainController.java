@@ -31,6 +31,7 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Task, String> descCol;
     @FXML private TableColumn<Task, LocalDate> dateCol;
     @FXML private TableColumn<Task, Integer> prioCol;
+    @FXML private TableColumn<Task, Void> deleteCol;
     @FXML private ImageView     petImage;
     @FXML private ProgressBar    satisfactionBar;
     @FXML private ProgressBar    fullnessBar;
@@ -88,6 +89,27 @@ public class MainController implements Initializable {
         prioCol.setOnEditCommit(evt -> 
             evt.getRowValue().setPriority(evt.getNewValue())
         );
+
+        deleteCol.setCellFactory(param -> new TableCell<>() {
+            private final Button deleteButton = new Button("删除");
+
+            {
+                deleteButton.setOnAction(event -> {
+                    Task task = getTableView().getItems().get(getIndex());
+                    tasks.remove(task);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+                }
+            }
+        });
 
 
         ImageView iv = (ImageView) plusBtn.getGraphic();
