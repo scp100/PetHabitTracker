@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import tw.ntou.pettracker.model.Task;
+import tw.ntou.pettracker.model.Pet;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -30,11 +31,26 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Task, String> descCol;
     @FXML private TableColumn<Task, LocalDate> dateCol;
     @FXML private TableColumn<Task, Integer> prioCol;
+    @FXML private ImageView     petImage;
+    @FXML private ProgressBar    satisfactionBar;
+    @FXML private ProgressBar    fullnessBar;
 
     private final ObservableList<Task> tasks = FXCollections.observableArrayList();
+    private Pet pet;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
+        //pet model
+        pet = new Pet();
+
+        petImage.setImage(new Image(
+            getClass().getResource("icon/cat.png").toExternalForm()));
+
+        satisfactionBar.progressProperty()
+            .bind(pet.satisfactionProperty().divide(100.0));
+        fullnessBar.progressProperty()
+            .bind(pet.fullnessProperty().divide(100.0));
 
         tasks.addAll(Persistence.loadTasks()); // 載入 json
 

@@ -3,10 +3,29 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
+
 <StackPane xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="tw.ntou.pettracker.MainController">
   <children>
     <BorderPane>
+      <left>
+        <VBox fx:id="petPanel" spacing="8" alignment="TOP_CENTER">
+          <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+          </padding>
+
+          <ImageView fx:id="petImage"
+           fitWidth="100"
+           preserveRatio="true"
+           pickOnBounds="true"/>
+          <Label text="滿意度"/>
+          <ProgressBar fx:id="satisfactionBar" prefWidth="120"/>
+
+          <Label text="飽食度"/>
+          <ProgressBar fx:id="fullnessBar" prefWidth="120"/>
+        </VBox>
+      </left>
       <top>
         <HBox fx:id="inputBar" spacing="8">
           <padding>
