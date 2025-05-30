@@ -16,6 +16,7 @@
     </properties>
 
     <dependencies>
+        <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
@@ -36,6 +37,15 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+
+        <!-- ControlsFX (可選，用於進階通知) -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.1.2</version>
+        </dependency>
+
+        <!-- 測試 -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -43,19 +53,17 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- 處理 Task 的 JSON 儲存與載入。 -->
+        <!-- JSON 處理 -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.17.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>2.17.0</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -81,6 +89,3 @@
         </plugins>
     </build>
 </project>
-
-
-

@@ -1,0 +1,197 @@
+/* ===== 深色主題 ===== */
+
+.root {
+    -fx-background-color: #212529;
+    -fx-font-family: "Segoe UI", "微軟雅黑", "Microsoft YaHei", system;
+}
+
+.app-container {
+    -fx-background-color: #212529;
+}
+
+.header-bar {
+    -fx-background-color: #2b3035;
+    -fx-border-color: transparent transparent #495057 transparent;
+}
+
+.app-title {
+    -fx-text-fill: #f8f9fa;
+}
+
+.progress-display {
+    -fx-background-color: #343a40;
+}
+
+.progress-label {
+    -fx-text-fill: #adb5bd;
+}
+
+.progress-value {
+    -fx-text-fill: #198754;
+}
+
+.view-tabs {
+    -fx-background-color: #2b3035;
+    -fx-border-color: transparent transparent #495057 transparent;
+}
+
+.view-tab {
+    -fx-text-fill: #adb5bd;
+}
+
+.view-tab:selected {
+    -fx-text-fill: #0d6efd;
+    -fx-background-color: rgba(13, 110, 253, 0.1);
+}
+
+.view-tab:hover {
+    -fx-background-color: rgba(13, 110, 253, 0.15);
+}
+
+.quick-add-bar {
+    -fx-background-color: #2b3035;
+    -fx-border-color: transparent transparent #495057 transparent;
+}
+
+.quick-add-input {
+    -fx-background-color: #343a40;
+    -fx-border-color: #495057;
+    -fx-text-fill: #f8f9fa;
+}
+
+.quick-add-input:focused {
+    -fx-border-color: #0d6efd;
+    -fx-background-color: #2b3035;
+}
+
+.search-filter-bar {
+    -fx-background-color: #212529;
+    -fx-border-color: transparent transparent #495057 transparent;
+}
+
+.search-input, .filter-combo, .sort-combo {
+    -fx-background-color: #2b3035;
+    -fx-border-color: #495057;
+    -fx-text-fill: #f8f9fa;
+}
+
+.task-table {
+    -fx-background-color: #2b3035;
+}
+
+.task-table .column-header-background {
+    -fx-background-color: #343a40;
+    -fx-border-color: transparent transparent #495057 transparent;
+}
+
+.task-table .column-header {
+    -fx-text-fill: #adb5bd;
+}
+
+.task-table .table-row-cell {
+    -fx-background-color: #2b3035;
+    -fx-border-color: transparent transparent #495057 transparent;
+}
+
+.task-table .table-row-cell:hover {
+    -fx-background-color: #343a40;
+}
+
+.task-table .table-row-cell:selected {
+    -fx-background-color: rgba(13, 110, 253, 0.2);
+}
+
+.task-table .table-cell {
+    -fx-text-fill: #f8f9fa;
+}
+
+.pet-sidebar {
+    -fx-background-color: #2b3035;
+}
+
+.pet-avatar-section {
+    -fx-background-color: #343a40;
+}
+
+.pet-name {
+    -fx-text-fill: #f8f9fa;
+}
+
+.pet-stats {
+    -fx-background-color: #343a40;
+}
+
+.task-stats {
+    -fx-background-color: #343a40;
+    -fx-border-color: #495057;
+}
+
+.section-title {
+    -fx-text-fill: #f8f9fa;
+}
+
+.stat-label, .stat-label-small {
+    -fx-text-fill: #adb5bd;
+}
+
+.stat-value, .stat-value-small {
+    -fx-text-fill: #0dcaf0;
+}
+
+.add-button, .pet-action-btn {
+    -fx-background-color: #0d6efd;
+}
+
+.add-button:hover, .pet-action-btn:hover {
+    -fx-background-color: #0b5ed7;
+}
+
+.clear-filter-btn {
+    -fx-background-color: #6c757d;
+}
+
+.batch-btn {
+    -fx-background-color: #198754;
+}
+
+.batch-btn-danger {
+    -fx-background-color: #dc3545;
+}
+
+.check-box .box {
+    -fx-background-color: #2b3035;
+    -fx-border-color: #495057;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #198754;
+    -fx-border-color: #198754;
+}
+
+.progress-bar {
+    -fx-background-color: #343a40;
+}
+
+.progress-bar .track {
+    -fx-background-color: #343a40;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #495057;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #adb5bd;
+}
+
+.fab {
+    -fx-background-color: #dc3545;
+}
+
+.fab:hover {
+    -fx-background-color: #bb2d3b;
+}
+
+.empty-placeholder {
+    -fx-text-fill: #6c757d;
+}

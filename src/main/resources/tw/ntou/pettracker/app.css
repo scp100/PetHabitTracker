@@ -1,3 +1,6 @@
+/* ===== 基礎樣式表 - 保留原有設計 ===== */
+
+/* FAB 按鈕基礎樣式 */
 .fab {
   -fx-background-radius: 30px;
   -fx-min-width: 60px;
@@ -6,14 +9,61 @@
   -fx-background-color: #ff5252;
   -fx-text-fill: rgb(255, 255, 255);
   -fx-cursor: hand;
-  -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.3) , 6 ,0 ,0 ,0 );
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 6, 0, 0, 0);
 }
 
+/* 原有的添加表單樣式 */
 .add-form {
   -fx-background-color: white;
   -fx-padding: 20;
   -fx-spacing: 10;
-  -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.25) , 10 ,0 ,0 ,0 );
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 0);
   -fx-max-width: 300;
   -fx-alignment: center;
+}
+
+/* 基礎按鈕樣式 */
+.button {
+  -fx-cursor: hand;
+  -fx-font-size: 14px;
+}
+
+/* 基礎輸入框樣式 */
+.text-field {
+  -fx-font-size: 14px;
+  -fx-padding: 8 12;
+}
+
+/* 基礎標籤樣式 */
+.label {
+  -fx-font-size: 14px;
+}
+
+/* 基礎表格樣式 */
+.table-view {
+  -fx-font-size: 14px;
+}
+
+.table-view .column-header {
+  -fx-font-weight: bold;
+}
+
+/* 基礎進度條樣式 */
+.progress-bar {
+  -fx-pref-height: 10;
+}
+
+/* 基礎複選框樣式 */
+.check-box {
+  -fx-font-size: 14px;
+}
+
+/* 基礎下拉框樣式 */
+.combo-box {
+  -fx-font-size: 14px;
+}
+
+/* 基礎日期選擇器樣式 */
+.date-picker {
+  -fx-font-size: 14px;
 }

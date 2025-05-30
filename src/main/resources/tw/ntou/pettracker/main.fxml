@@ -1,62 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="tw.ntou.pettracker.MainController">
+           fx:controller="tw.ntou.pettracker.MainController"
+           styleClass="app-container">
   <children>
-    <BorderPane>
-      <left>
-        <VBox fx:id="petPanel" spacing="8" alignment="TOP_CENTER">
-          <padding>
-            <Insets top="10" right="10" bottom="10" left="10"/>
-          </padding>
+    <!-- 原本的 BorderPane 主體 -->
+    <BorderPane styleClass="app-container">
 
-          <ImageView fx:id="petImage"
-           fitWidth="100"
-           preserveRatio="true"
-           pickOnBounds="true"/>
-          <Label text="滿意度"/>
-          <ProgressBar fx:id="satisfactionBar" prefWidth="120"/>
-
-          <Label text="飽食度"/>
-          <ProgressBar fx:id="fullnessBar" prefWidth="120"/>
-        </VBox>
-      </left>
+      <!-- 頂部標題欄和導航 -->
       <top>
-        <HBox fx:id="inputBar" spacing="8">
-          <padding>
-              <Insets top="10" right="10" bottom="10" left="10"/>
-          </padding>
-          <children>
-            <TextField fx:id="descField" promptText="輸入任務描述…"/>
-            <DatePicker fx:id="datePicker"/>
-            <ComboBox fx:id="prioBox"/>
-            <Button text="新增" onAction="#onAddTask"/>
-          </children>
-        </HBox>
+        <VBox>
+          <HBox styleClass="header-bar" alignment="CENTER_LEFT">
+            <padding>
+              <Insets top="16" right="24" bottom="16" left="24"/>
+            </padding>
+
+            <Label text="🐱 Pet Habit Tracker" styleClass="app-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox styleClass="progress-display" spacing="16" alignment="CENTER">
+              <Label text="今日:" styleClass="progress-label"/>
+              <Label fx:id="dailyProgressLabel" text="0/5" styleClass="progress-value"/>
+              <Label text="本月:" styleClass="progress-label"/>
+              <Label fx:id="monthlyProgressLabel" text="0/30" styleClass="progress-value"/>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox spacing="8">
+              <Label fx:id="streakLabel" text="🔥 0 天" styleClass="streak-label"/>
+
+              <Button fx:id="themeButton" text="🎨" styleClass="icon-button">
+                <tooltip><Tooltip text="切換主題"/></tooltip>
+              </Button>
+              <Button fx:id="statsButton" text="📊" styleClass="icon-button">
+                <tooltip><Tooltip text="統計報告"/></tooltip>
+              </Button>
+              <Button fx:id="achievementButton" text="🏆" styleClass="icon-button">
+                <tooltip><Tooltip text="成就系統"/></tooltip>
+              </Button>
+              <Button fx:id="settingsBtn" text="⚙️" styleClass="icon-button">
+                <tooltip><Tooltip text="設定"/></tooltip>
+              </Button>
+            </HBox>
+          </HBox>
+
+          <HBox styleClass="view-tabs" spacing="0">
+            <padding>
+              <Insets top="0" right="24" bottom="0" left="24"/>
+            </padding>
+            <ToggleButton fx:id="todayTab" text="📅 今日" styleClass="view-tab" selected="true"/>
+            <ToggleButton fx:id="upcomingTab" text="📋 即將到來" styleClass="view-tab"/>
+            <ToggleButton fx:id="allTab" text="📁 全部" styleClass="view-tab"/>
+          </HBox>
+        </VBox>
       </top>
+
+      <!-- 主要內容區域 -->
       <center>
-        <TableView fx:id="table" editable="true">
-          <columns>
-            <TableColumn fx:id="doneCol" text="完成" prefWidth="60"/>
-            <TableColumn fx:id="descCol" text="描述" prefWidth="200"/>
-            <TableColumn fx:id="dateCol" text="到期日" prefWidth="120"/>
-            <TableColumn fx:id="prioCol" text="優先級" prefWidth="80"/>
-            <TableColumn fx:id="deleteCol" text="" prefWidth="60"/>
-          </columns>
-        </TableView>
+        <HBox spacing="0">
+          <VBox styleClass="main-content" HBox.hgrow="ALWAYS">
+
+            <HBox fx:id="inputBar" styleClass="quick-add-bar" spacing="12" alignment="CENTER_LEFT"
+                  visible="true" managed="true">
+              <padding><Insets top="16" right="24" bottom="16" left="24"/></padding>
+              <TextField fx:id="descField"
+                         promptText="➕ 快速新增任務... (例: 明天 運動 30分鐘)"
+                         styleClass="quick-add-input"
+                         onAction="#onAddTask"
+                         HBox.hgrow="ALWAYS"/>
+              <DatePicker fx:id="datePicker" styleClass="date-picker"/>
+              <ComboBox fx:id="prioBox" styleClass="priority-combo" prefWidth="100"/>
+              <ComboBox fx:id="categoryFilter" styleClass="category-combo"
+                        promptText="選擇類別" prefWidth="120"/>
+              <Button text="➕ 新增" styleClass="add-button" onAction="#onAddTask"/>
+            </HBox>
+
+            <HBox styleClass="search-filter-bar" spacing="12" alignment="CENTER_LEFT">
+              <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+              <TextField fx:id="searchField"
+                         promptText="🔍 搜索任務..."
+                         styleClass="search-input"
+                         prefWidth="200"/>
+              <ComboBox fx:id="filterPriorityBox" promptText="優先級篩選"
+                        styleClass="filter-combo" prefWidth="120"/>
+              <ComboBox fx:id="filterStatusBox" promptText="狀態篩選"
+                        styleClass="filter-combo" prefWidth="100"/>
+              <Button fx:id="clearFiltersBtn" text="🗑️ 清除篩選"
+                      styleClass="clear-filter-btn" onAction="#onClearFilters"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Button fx:id="batchCompleteBtn" text="✅ 批量完成"
+                      styleClass="batch-btn" visible="false" onAction="#onBatchComplete"/>
+              <Button fx:id="batchDeleteBtn" text="🗑️ 批量刪除"
+                      styleClass="batch-btn-danger" visible="false" onAction="#onBatchDelete"/>
+              <Label text="排序:" styleClass="sort-label"/>
+              <ComboBox fx:id="sortBox" styleClass="sort-combo" prefWidth="150"/>
+            </HBox>
+
+            <ScrollPane styleClass="task-scroll-pane" fitToWidth="true" VBox.vgrow="ALWAYS">
+              <content>
+                <TableView fx:id="table" styleClass="task-table" editable="true">
+                  <columns>
+                    <TableColumn fx:id="doneCol" text="✓" prefWidth="50"
+                                 resizable="false" styleClass="done-column"/>
+                    <TableColumn fx:id="descCol" text="任務描述" prefWidth="280"
+                                 styleClass="desc-column"/>
+                    <TableColumn fx:id="dateCol" text="到期日" prefWidth="100"
+                                 styleClass="date-column"/>
+                    <TableColumn fx:id="prioCol" text="優先級" prefWidth="80"
+                                 styleClass="priority-column"/>
+                    <TableColumn fx:id="categoryCol" text="類別" prefWidth="100"
+                                 styleClass="category-column"/>
+                    <TableColumn fx:id="deleteCol" text="操作" prefWidth="80"
+                                 resizable="false" styleClass="action-column"/>
+                  </columns>
+                  <placeholder>
+                    <Label text="暫無任務，點擊上方輸入框新增第一個任務吧！"
+                           styleClass="empty-placeholder"/>
+                  </placeholder>
+                </TableView>
+              </content>
+            </ScrollPane>
+
+          </VBox>
+
+          <VBox fx:id="petPanel" styleClass="pet-sidebar" spacing="16">
+            <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+            <VBox styleClass="pet-avatar-section" spacing="12" alignment="CENTER">
+              <ImageView fx:id="petImage" fitWidth="120" fitHeight="120"
+                         preserveRatio="true" styleClass="pet-avatar"/>
+              <Label text="小貓咪" styleClass="pet-name"/>
+              <Label text="Lv.1" styleClass="pet-level"/>
+            </VBox>
+
+            <VBox styleClass="pet-stats" spacing="16">
+              <VBox spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                  <Label text="💖" styleClass="stat-icon"/>
+                  <Label text="滿意度" styleClass="stat-label"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Label fx:id="satisfactionLabel" text="80%" styleClass="stat-value"/>
+                </HBox>
+                <ProgressBar fx:id="satisfactionBar" prefWidth="200"
+                             progress="0.8" styleClass="satisfaction-bar"/>
+              </VBox>
+              <VBox spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                  <Label text="🍖" styleClass="stat-icon"/>
+                  <Label text="飽食度" styleClass="stat-label"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Label fx:id="fullnessLabel" text="60%" styleClass="stat-value"/>
+                </HBox>
+                <ProgressBar fx:id="fullnessBar" prefWidth="200"
+                             progress="0.6" styleClass="fullness-bar"/>
+              </VBox>
+            </VBox>
+
+            <VBox styleClass="task-stats" spacing="12">
+              <Label text="📊 任務統計" styleClass="section-title"/>
+              <!-- 其餘統計內容不變 -->
+            </VBox>
+
+            <VBox spacing="8" VBox.vgrow="ALWAYS" alignment="BOTTOM_CENTER">
+              <!-- 互動按鈕區保持不變 -->
+            </VBox>
+          </VBox>
+        </HBox>
       </center>
     </BorderPane>
-    <Button fx:id="plusBtn" text="+"
+
+    <!-- 疊加顯示：Loading 指示器 -->
+    <ProgressIndicator fx:id="loadingIndicator"
+                       visible="false"
+                       styleClass="loading-indicator"
+                       StackPane.alignment="CENTER"/>
+
+    <!-- 疊加顯示：浮動 + 按鈕 -->
+    <Button fx:id="plusBtn"
+            text="+"
             styleClass="fab"
-            onAction="#onShowInput"
-            StackPane.alignment="BOTTOM_LEFT">
+            onAction="#onFocusInput"
+            StackPane.alignment="BOTTOM_RIGHT">
       <StackPane.margin>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="30" right="30"/>
       </StackPane.margin>
     </Button>
   </children>

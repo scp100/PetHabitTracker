@@ -1,0 +1,112 @@
+/* ===== 淺色主題 ===== */
+
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-font-family: "Segoe UI", "微軟雅黑", "Microsoft YaHei", system;
+}
+
+.app-container {
+    -fx-background-color: #f8f9fa;
+}
+
+.header-bar {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+}
+
+.app-title {
+    -fx-text-fill: #212529;
+}
+
+.progress-display {
+    -fx-background-color: #f8f9fa;
+}
+
+.progress-value {
+    -fx-text-fill: #28a745;
+}
+
+.view-tab {
+    -fx-text-fill: #6c757d;
+}
+
+.view-tab:selected {
+    -fx-text-fill: #007bff;
+    -fx-background-color: rgba(0, 123, 255, 0.05);
+}
+
+.quick-add-bar {
+    -fx-background-color: #ffffff;
+}
+
+.quick-add-input {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e9ecef;
+    -fx-text-fill: #495057;
+}
+
+.quick-add-input:focused {
+    -fx-border-color: #007bff;
+}
+
+.task-table {
+    -fx-background-color: #ffffff;
+}
+
+.task-table .table-row-cell {
+    -fx-background-color: #ffffff;
+}
+
+.task-table .table-row-cell:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+.task-table .table-row-cell:selected {
+    -fx-background-color: rgba(0, 123, 255, 0.1);
+}
+
+.pet-sidebar {
+    -fx-background-color: #ffffff;
+}
+
+.pet-avatar-section {
+    -fx-background-color: #f8f9fa;
+}
+
+.pet-stats {
+    -fx-background-color: #f8f9fa;
+}
+
+.task-stats {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e9ecef;
+}
+
+.add-button, .pet-action-btn {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+}
+
+.add-button:hover, .pet-action-btn:hover {
+    -fx-background-color: #0056b3;
+}
+
+.label {
+    -fx-text-fill: #212529;
+}
+
+.stat-label, .stat-label-small {
+    -fx-text-fill: #6c757d;
+}
+
+.progress-bar .track {
+    -fx-background-color: #e9ecef;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #dee2e6;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #adb5bd;
+}

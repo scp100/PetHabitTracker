@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tw.ntou.pettracker.DialogController"
+      styleClass="dialog-container"
+      spacing="20"
+      prefWidth="400">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- 標題 -->
+    <Label text="新增任務" styleClass="dialog-title"/>
+
+    <!-- 表單內容 -->
+    <VBox spacing="15">
+        <!-- 任務描述 -->
+        <VBox spacing="5">
+            <Label text="任務描述" styleClass="field-label"/>
+            <TextField fx:id="descField"
+                       promptText="請輸入任務描述"
+                       styleClass="dialog-input"/>
+        </VBox>
+
+        <!-- 日期選擇 -->
+        <VBox spacing="5">
+            <Label text="到期日期" styleClass="field-label"/>
+            <DatePicker fx:id="datePicker"
+                        styleClass="dialog-date-picker"
+                        prefWidth="Infinity"/>
+        </VBox>
+
+        <!-- 優先級選擇 -->
+        <VBox spacing="5">
+            <Label text="優先級" styleClass="field-label"/>
+            <ComboBox fx:id="prioBox"
+                      styleClass="dialog-combo"
+                      prefWidth="Infinity"/>
+        </VBox>
+
+        <!-- 提醒設置 -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="remindCheck" text="設置提醒"/>
+            <DatePicker fx:id="remindPicker"
+                        disable="true"
+                        prefWidth="200"/>
+        </HBox>
+
+        <!-- 標籤輸入 -->
+        <VBox spacing="5">
+            <Label text="標籤（用逗號分隔）" styleClass="field-label"/>
+            <TextField fx:id="tagsField"
+                       promptText="例如: 工作, 重要"
+                       styleClass="dialog-input"/>
+        </VBox>
+    </VBox>
+
+    <!-- 按鈕區域 -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="cancelBtn"
+                text="取消"
+                styleClass="dialog-btn-cancel"
+                onAction="#onCancel"/>
+        <Button fx:id="submitBtn"
+                text="確定"
+                styleClass="dialog-btn-submit"
+                defaultButton="true"/>
+    </HBox>
+
+</VBox>
