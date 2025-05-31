@@ -11,6 +11,7 @@ import tw.ntou.pettracker.model.Task;
 import tw.ntou.pettracker.service.NotificationService;
 import tw.ntou.pettracker.service.StatisticsService;
 import tw.ntou.pettracker.service.AchievementManager;
+import tw.ntou.pettracker.service.PetVideoService; // 新增：影片服務匯入
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -55,10 +56,7 @@ public class AchievementController {
      * 初始化所有成就
      */
     private void initializeAchievements() {
-
         achievements.addAll(AchievementManager.getAllAchievements());
-
-
         achievements.forEach(achievement ->
                 achievementProgress.put(achievement.getId(), 0)
         );
@@ -84,7 +82,6 @@ public class AchievementController {
         checkAndUnlockAchievement("task_10", (int) completedCount);
         checkAndUnlockAchievement("task_50", (int) completedCount);
         checkAndUnlockAchievement("task_100", (int) completedCount);
-
 
         long highPriorityCompleted = tasks.stream()
                 .filter(Task::isDone)
@@ -118,14 +115,12 @@ public class AchievementController {
                 .count();
         checkAndUnlockAchievement("early_bird", (int) earlyBirdCount);
 
-
         long nightOwlCount = tasks.stream()
                 .filter(Task::isDone)
                 .filter(t -> t.getCompletedAt() != null &&
                         t.getCompletedAt().getHour() >= 22)
                 .count();
         checkAndUnlockAchievement("night_owl", (int) nightOwlCount);
-
 
         long todayCategories = tasks.stream()
                 .filter(Task::isDone)
@@ -188,7 +183,41 @@ public class AchievementController {
                             achievement.getPoints()
                     );
                 }
+                // 新增：解鎖相關影片
+                unlockRelatedVideos(achievementId);
             }
+        }
+    }
+
+    /**
+     * 根據成就 ID 解鎖對應影片或影片分級
+     */
+    private void unlockRelatedVideos(String achievementId) {
+        PetVideoService videoService = PetVideoService.getInstance();
+
+        switch (achievementId) {
+            case "task_10":
+                videoService.unlockVideosUpToLevel(1);
+                break;
+            case "task_50":
+                videoService.unlockVideosUpToLevel(2);
+                break;
+            case "task_100":
+                videoService.unlockVideosUpToLevel(3);
+                break;
+            case "pet_happy":
+                videoService.unlockVideo("撒嬌.mp4");
+                break;
+            case "streak_7":
+                videoService.unlockVideo("正經貓.mp4");
+                break;
+            case "streak_30":
+                videoService.unlockVideosForAchievement("fashion_master");
+                break;
+            case "pet_play_10":
+                videoService.unlockVideo("愛咬不咬貓.mp4");
+                break;
+            // 如有其他成就與影片對應，可依需求繼續添加
         }
     }
 
@@ -201,7 +230,6 @@ public class AchievementController {
             int currentStreak = stats.currentStreak;
 
             streakLabel.setText("🔥 " + currentStreak + " 天");
-
 
             if (currentStreak >= 30) {
                 streakLabel.setStyle("-fx-text-fill: #ff6b6b; -fx-font-weight: bold; -fx-font-size: 16px;");
@@ -223,16 +251,13 @@ public class AchievementController {
         dialog.setTitle("🏆 成就系統");
         dialog.setHeaderText("您的成就進度");
 
-
         int totalPoints = achievements.stream()
                 .filter(Achievement::isUnlocked)
                 .mapToInt(Achievement::getPoints)
                 .sum();
 
-
         long unlockedCount = achievements.stream().filter(Achievement::isUnlocked).count();
         int totalCount = achievements.size();
-
 
         VBox topStats = new VBox(5);
         Label pointsLabel = new Label("🏆 總成就點數: " + totalPoints);
@@ -253,7 +278,6 @@ public class AchievementController {
         achievementList.setPrefHeight(400);
         achievementList.setPrefWidth(500);
 
-
         HBox filterBox = new HBox(10);
         ToggleGroup filterGroup = new ToggleGroup();
 
@@ -268,7 +292,6 @@ public class AchievementController {
         lockedBtn.setToggleGroup(filterGroup);
 
         filterBox.getChildren().addAll(allBtn, unlockedBtn, lockedBtn);
-
 
         allBtn.setOnAction(e -> achievementList.setItems(achievements));
         unlockedBtn.setOnAction(e -> {
@@ -304,13 +327,10 @@ public class AchievementController {
                 box.setAlignment(Pos.CENTER_LEFT);
                 box.setPadding(new javafx.geometry.Insets(5));
 
-
                 Label iconLabel = new Label(achievement.getIcon());
                 iconLabel.setStyle("-fx-font-size: 28px;");
 
-
                 VBox info = new VBox(4);
-
 
                 HBox titleBox = new HBox(10);
                 Label nameLabel = new Label(achievement.getName());
@@ -321,21 +341,17 @@ public class AchievementController {
 
                 titleBox.getChildren().addAll(nameLabel, pointsLabel);
 
-
                 Label descLabel = new Label(achievement.getDescription());
                 descLabel.setStyle("-fx-text-fill: #6c757d; -fx-font-size: 12px;");
 
-
                 ProgressBar progressBar = new ProgressBar(achievement.getProgressPercentage() / 100);
                 progressBar.setPrefWidth(200);
-
 
                 Label progressLabel = new Label(String.format("%d/%d",
                         achievement.getProgress(), achievement.getMaxProgress()));
                 progressLabel.setStyle("-fx-font-size: 11px;");
 
                 info.getChildren().addAll(titleBox, descLabel, progressBar, progressLabel);
-
 
                 if (achievement.isUnlocked()) {
                     Label unlockedLabel = new Label("✅ 已解鎖");

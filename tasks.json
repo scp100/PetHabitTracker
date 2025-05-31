@@ -1,33 +1,17 @@
 [ {
-  "description" : "Sssssss",
-  "done" : false,
-  "dueDate" : "2025-05-26",
-  "priority" : 3,
+  "description" : "exercie",
+  "done" : true,
+  "dueDate" : "2025-05-31",
+  "priority" : 4,
   "remind" : false,
   "remindAt" : null,
   "tags" : ""
 }, {
-  "description" : "sss",
+  "description" : "ssssss",
   "done" : false,
-  "dueDate" : "2025-07-10",
+  "dueDate" : "2025-05-31",
   "priority" : 3,
   "remind" : false,
   "remindAt" : null,
   "tags" : ""
-}, {
-  "description" : "fffffffffffffffffff",
-  "done" : false,
-  "dueDate" : "2025-05-26",
-  "priority" : 3,
-  "remind" : false,
-  "remindAt" : null,
-  "tags" : ""
-}, {
-  "description" : "fffff",
-  "done" : false,
-  "dueDate" : "2025-05-30",
-  "priority" : 5,
-  "remind" : true,
-  "remindAt" : null,
-  "tags" : "ccccc"
 } ]

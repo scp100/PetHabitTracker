@@ -1,43 +1,69 @@
 package tw.ntou.pettracker;
 
-import javafx.animation.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;       // ←【務必】 import ToggleGroup
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;               // ←【務必】 import Media
+import javafx.scene.media.MediaPlayer;         // ←【務必】 import MediaPlayer
+import javafx.scene.media.MediaView;           // ←【務必】 import MediaView
 import javafx.util.Duration;
 
-// Model imports
-import tw.ntou.pettracker.model.*;
+import tw.ntou.pettracker.model.Pet;
+import tw.ntou.pettracker.model.PetVideoType;
+import tw.ntou.pettracker.model.Task;
+import tw.ntou.pettracker.model.Task.TaskCategory;
+import tw.ntou.pettracker.model.ViewMode;
 
-// Controller imports
-import tw.ntou.pettracker.controller.*;
+import tw.ntou.pettracker.service.NotificationService;
+import tw.ntou.pettracker.service.PetVideoService;
+import tw.ntou.pettracker.service.PetVideoService.PetVideo;
 
-// Service imports
-import tw.ntou.pettracker.service.*;
+import tw.ntou.pettracker.controller.AnimationController;
+import tw.ntou.pettracker.controller.AchievementController;
+import tw.ntou.pettracker.controller.FilterController;
+import tw.ntou.pettracker.controller.TaskController;
+import tw.ntou.pettracker.controller.StatisticsController;
+import tw.ntou.pettracker.controller.PetController;
+import tw.ntou.pettracker.controller.ThemeController;
 
-// Util imports
-import tw.ntou.pettracker.util.*;
+import tw.ntou.pettracker.util.DragDropManager;
+import tw.ntou.pettracker.util.KeyboardShortcutManager;
+import tw.ntou.pettracker.util.MessageUtil;
+import tw.ntou.pettracker.util.PetVideoGalleryDialog;
+import tw.ntou.pettracker.Persistence;          // ←【務必】 import Persistence
+import tw.ntou.pettracker.util.TableColumnSetup;
+import tw.ntou.pettracker.util.TaskEditDialog;       // ←【務必】 import TaskEditDialog
+import tw.ntou.pettracker.util.TaskMemento;          // ←【務必】 import TaskMemento
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.*;
+import java.util.ResourceBundle;
+import java.util.Stack;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+
 
 /**
  * 主控制器 - 負責協調各個子控制器和服務
@@ -80,24 +106,24 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Task, String> descCol;
     @FXML private TableColumn<Task, LocalDate> dateCol;
     @FXML private TableColumn<Task, Integer> prioCol;
+    @FXML private TableColumn<Task, TaskCategory> categoryCol;
     @FXML private TableColumn<Task, Void> deleteCol;
     @FXML private ImageView petImage;
     @FXML private ProgressBar satisfactionBar;
     @FXML private ProgressBar fullnessBar;
 
-    // 新增UI元件
-    @FXML private ComboBox<Task.TaskCategory> categoryFilter;
+    // 新增 UI 元件
+    @FXML private ComboBox<TaskCategory> categoryFilter;
     @FXML private Button themeButton;
     @FXML private Button statsButton;
     @FXML private Button achievementButton;
     @FXML private Label streakLabel;
     @FXML private ProgressIndicator loadingIndicator;
-    @FXML private TableColumn<Task, Task.TaskCategory> categoryCol;
-    @FXML private void onClearFilters(){
-        filterController.clearAllFilters();
-        filterController.applyFilters();
-        filterController.applySorting("📅 按到期日排序");
-    }
+
+    // 播放影片相關元件
+    @FXML private MediaView petMediaView;
+    @FXML private Button videoGalleryBtn;
+
     // ===== 資料模型 =====
     private final ObservableList<Task> tasks = FXCollections.observableArrayList();
     private FilteredList<Task> filteredTasks;
@@ -117,8 +143,15 @@ public class MainController implements Initializable {
     private NotificationService notificationService;
     private ViewMode currentView = ViewMode.TODAY;
 
+    // ===== 撤銷/重做 系統 =====
+    private final Stack<TaskMemento> undoStack = new Stack<>();
+    private final Stack<TaskMemento> redoStack = new Stack<>();
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println(">>> MainController.initialize() 已執行");
+
         // 初始化寵物
         initializePet();
 
@@ -128,7 +161,7 @@ public class MainController implements Initializable {
         // 初始化子控制器
         initializeControllers();
 
-        // 初始化UI
+        // 初始化 UI
         initializeUI();
 
         // 載入資料
@@ -144,7 +177,7 @@ public class MainController implements Initializable {
     private void initializePet() {
         pet = new Pet();
 
-        // 載入寵物圖片
+        // 載入寵物圖片 (若無法讀取則顯示警告)
         try {
             petImage.setImage(new Image(
                     getClass().getResource("/tw/ntou/pettracker/icon/cat.png").toExternalForm()));
@@ -172,6 +205,11 @@ public class MainController implements Initializable {
         petController.setAnimationController(animationController);
         petController.setFeedButton(feedPetBtn);
         petController.setPlayButton(playWithPetBtn);
+
+        // 將 FXML 中的 MediaView 注入到 PetController，用來播放影片
+        if (petMediaView != null) {
+            petController.setPetMediaView(petMediaView);
+        }
 
         // 初始化篩選控制器
         filterController = new FilterController(tasks);
@@ -275,7 +313,7 @@ public class MainController implements Initializable {
         }
 
         if (categoryFilter != null) {
-            categoryFilter.setItems(FXCollections.observableArrayList(Task.TaskCategory.values()));
+            categoryFilter.setItems(FXCollections.observableArrayList(TaskCategory.values()));
             categoryFilter.setPromptText("選擇類別");
         }
 
@@ -297,7 +335,7 @@ public class MainController implements Initializable {
                 this::deleteTask);
 
         // 設定多選和批量操作
-        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        table.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
         table.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Task>) c -> {
             boolean hasSelection = !table.getSelectionModel().getSelectedItems().isEmpty();
             if (batchCompleteBtn != null) batchCompleteBtn.setVisible(hasSelection);
@@ -344,15 +382,14 @@ public class MainController implements Initializable {
             loadingIndicator.setVisible(true);
         }
 
-        CompletableFuture.supplyAsync(() ->
-                Persistence.loadTasks()
-        ).thenAcceptAsync(loadedTasks -> {
-            tasks.addAll(loadedTasks);
-            updateAllControllers();
-            if (loadingIndicator != null) {
-                loadingIndicator.setVisible(false);
-            }
-        }, Platform::runLater);
+        CompletableFuture.supplyAsync(Persistence::loadTasks)
+                .thenAcceptAsync(loadedTasks -> {
+                    tasks.addAll(loadedTasks);
+                    updateAllControllers();
+                    if (loadingIndicator != null) {
+                        loadingIndicator.setVisible(false);
+                    }
+                }, Platform::runLater);
     }
 
     // ===== 視圖切換方法 =====
@@ -376,13 +413,23 @@ public class MainController implements Initializable {
     }
 
     // ===== 任務操作方法 =====
-
+    @FXML
+    private void onClearFilters() {
+        // 先清掉所有篩選條件
+        filterController.clearAllFilters();
+        // 套用清除後的篩選（讓表格顯示更新）
+        filterController.applyFilters();
+        // 重新用預設排序（這裡範例是按到期日排序，可改成你想要的 預設 排序字串）
+        filterController.applySorting("📅 按到期日排序");
+    }
     @FXML
     private void onAddTask() {
         String desc = descField != null ? descField.getText().trim() : "";
         LocalDate due = datePicker != null ? datePicker.getValue() : LocalDate.now();
         Integer prio = prioBox != null ? prioBox.getValue() : 3;
-        Task.TaskCategory category = categoryFilter != null ? categoryFilter.getValue() : Task.TaskCategory.PERSONAL;
+        TaskCategory category = categoryFilter != null
+                ? categoryFilter.getValue()
+                : TaskCategory.PERSONAL;
 
         if (!desc.isEmpty() && due != null && prio != null) {
             Task newTask = taskController.createTask(desc, due, prio, category);
@@ -480,7 +527,6 @@ public class MainController implements Initializable {
         if (descField != null && descField.getText().trim().isEmpty()) {
             descField.setStyle("-fx-border-color: #dc3545; -fx-border-width: 2;");
             descField.setPromptText("⚠️ 請輸入任務描述");
-
             Timeline timeline = new Timeline(
                     new KeyFrame(Duration.seconds(2), e -> {
                         descField.setStyle("");
@@ -513,6 +559,7 @@ public class MainController implements Initializable {
                 new KeyFrame(Duration.seconds(30), e -> {
                     if (pet != null) {
                         pet.timePass();
+                        petController.timePasses();
                     }
                     Persistence.saveTasks(tasks);
                 })
@@ -523,10 +570,56 @@ public class MainController implements Initializable {
         notificationService.startPeriodicChecks(tasks, pet);
     }
 
-    // ===== 撤銷/重做系統 =====
+    // ===== 顯示影片相簿方法 =====
 
-    private final Stack<TaskMemento> undoStack = new Stack<>();
-    private final Stack<TaskMemento> redoStack = new Stack<>();
+    /**
+     * 這個方法對應到 FXML 裡 <Button onAction="#onShowVideoGallery" …/>
+     */
+    @FXML
+    private void onShowVideoGallery() {
+        System.out.println(">>> 已進入 onShowVideoGallery() 方法");
+        PetVideoGalleryDialog dialog = new PetVideoGalleryDialog();
+        dialog.showAndWait().ifPresent(selectedVideo -> {
+            if (selectedVideo != null) {
+                playVideoOnMediaView(selectedVideo);
+            }
+        });
+    }
+
+    /**
+     * 把 PetVideo 綁給 petMediaView 播放
+     * 參數一定要寫成 PetVideoService.PetVideo，並且在最上方 import tw.ntou.pettracker.service.PetVideoService.PetVideo;
+     */
+    private void playVideoOnMediaView(PetVideo video) {
+        String filename = video.getFilename();
+        // 從 Classpath 讀影片：src/main/resources/tw/ntou/pettracker/video/<filename>
+        URL videoUrl = getClass().getResource("/tw/ntou/pettracker/video/" + filename);
+        if (videoUrl == null) {
+            MessageUtil.showWarning("影片檔案不存在: " + filename);
+            return;
+        }
+
+        // 停止並釋放舊的 MediaPlayer
+        MediaPlayer oldPlayer = petMediaView.getMediaPlayer();
+        if (oldPlayer != null) {
+            oldPlayer.stop();
+            oldPlayer.dispose();
+        }
+
+        // 建立新的 MediaPlayer 並綁到 MediaView
+        Media media = new Media(videoUrl.toExternalForm());
+        MediaPlayer newPlayer = new MediaPlayer(media);
+        newPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+
+        petMediaView.setMediaPlayer(newPlayer);
+        // 若原本有顯示 petImage，這裡可以先隱藏它
+        petImage.setVisible(false);
+        petMediaView.setVisible(true);
+
+        newPlayer.play();
+    }
+
+    // ===== 撤銷/重做 系統 =====
 
     private void saveState(String description) {
         undoStack.push(new TaskMemento(tasks, description));

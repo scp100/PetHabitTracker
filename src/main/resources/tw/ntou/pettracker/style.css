@@ -581,15 +581,15 @@
 
 /* ===== 動畫效果 ===== */
 @keyframes pulse {
-    0% { -fx-scale-x: 1; -fx-scale-y: 1; }
-    50% { -fx-scale-x: 1.05; -fx-scale-y: 1.05; }
-    100% { -fx-scale-x: 1; -fx-scale-y: 1; }
+    0%   { -fx-scale-x: 1; -fx-scale-y: 1; }
+    50%  { -fx-scale-x: 1.05; -fx-scale-y: 1.05; }
+    100% { -fx-scale-x: 1;   -fx-scale-y: 1; }
 }
 
 @keyframes shake {
     0%, 100% { -fx-translate-x: 0; }
-    25% { -fx-translate-x: -5; }
-    75% { -fx-translate-x: 5; }
+    25%      { -fx-translate-x: -5; }
+    75%      { -fx-translate-x: 5; }
 }
 
 /* ===== Tooltip 樣式 ===== */
@@ -599,4 +599,38 @@
     -fx-background-radius: 6;
     -fx-font-size: 12px;
     -fx-padding: 6 10;
+}
+
+/* ===== 影片相簿按鈕 ===== */
+.gallery-button {
+    -fx-background-color: #17a2b8;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.gallery-button:hover {
+    -fx-background-color: #138496;
+}
+
+/* ===== 影片播放器樣式 ===== */
+.media-view {
+    -fx-background-color: transparent;
+}
+
+/* ===== 相簿對話框樣式 ===== */
+.video-gallery-dialog .video-card {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.video-gallery-dialog .video-card:hover {
+    -fx-border-color: #007bff;
+    -fx-background-color: #f8f9fa;
 }
