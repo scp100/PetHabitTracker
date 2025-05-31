@@ -474,7 +474,7 @@ public class MainController implements Initializable {
             saveState("編輯任務");
             table.refresh();
             updateAllControllers();
-            MessageUtil.showMessage("✏️ 任務已更新: " + result.getDescription());
+            MessageUtil.showMessage("任務已更新: " + result.getDescription());
         });
     }
 
@@ -482,7 +482,7 @@ public class MainController implements Initializable {
         if (MessageUtil.confirmDelete(task.getDescription())) {
             saveState("刪除任務");
             tasks.remove(task);
-            MessageUtil.showMessage("🗑️ 已刪除任務: " + task.getDescription());
+            MessageUtil.showMessage("已刪除任務: " + task.getDescription());
         }
     }
 
@@ -513,11 +513,11 @@ public class MainController implements Initializable {
     private void updatePromptText() {
         if (descField == null) return;
         String[] prompts = {
-                "➕ 新增今日任務...",
-                "📝 輸入要完成的事情...",
-                "🎯 設定新目標...",
-                "⭐ 今天要做什麼？",
-                "🚀 開始新任務..."
+                "新增今日任務...",
+                "輸入要完成的事情...",
+                "設定新目標...",
+                "今天要做什麼？",
+                "開始新任務..."
         };
         int randomIndex = (int) (Math.random() * prompts.length);
         descField.setPromptText(prompts[randomIndex]);
@@ -526,7 +526,7 @@ public class MainController implements Initializable {
     private void showInputError() {
         if (descField != null && descField.getText().trim().isEmpty()) {
             descField.setStyle("-fx-border-color: #dc3545; -fx-border-width: 2;");
-            descField.setPromptText("⚠️ 請輸入任務描述");
+            descField.setPromptText("請輸入任務描述");
             Timeline timeline = new Timeline(
                     new KeyFrame(Duration.seconds(2), e -> {
                         descField.setStyle("");
@@ -632,7 +632,7 @@ public class MainController implements Initializable {
             TaskMemento previousState = undoStack.pop();
             tasks.clear();
             tasks.addAll(previousState.getTasks());
-            MessageUtil.showMessage("↩️ 撤銷: " + previousState.getDescription());
+            MessageUtil.showMessage("撤銷: " + previousState.getDescription());
         }
     }
 
@@ -642,7 +642,7 @@ public class MainController implements Initializable {
             TaskMemento nextState = redoStack.pop();
             tasks.clear();
             tasks.addAll(nextState.getTasks());
-            MessageUtil.showMessage("↪️ 重做: " + nextState.getDescription());
+            MessageUtil.showMessage("重做: " + nextState.getDescription());
         }
     }
 

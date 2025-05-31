@@ -155,7 +155,6 @@ public class PetController {
             pet.setSatisfaction(Math.min(100, pet.getSatisfaction() + 10));
             pet.setFullness(Math.min(100, pet.getFullness() + 15));
 
-            // ► 這裡改用 PetVideoType.COSTUME 來代表「慶祝」影片
             PetVideo video = videoService.getRandomVideo(PetVideoType.COSTUME);
             if (video != null && petMediaView != null) {
                 playVideoOnMediaView(video);
@@ -246,7 +245,6 @@ public class PetController {
         return pet;
     }
 
-    // ===== 以下為：影片播放相關方法 =====
 
     /**
      * 更新寵物影片，根據 currentVideoType 播放對應影片
@@ -286,7 +284,7 @@ public class PetController {
         String filename = video.getFilename();
         // 假設 filename 例如 "逗貓14.mp4"
 
-        // ❶ 用 getResource 從 Classpath 內讀取影片 URL
+        //  用 getResource 從 Classpath 內讀取影片 URL
         //    路徑要跟 src/main/resources 底下的結構對應
         URL videoUrl = getClass().getResource("/tw/ntou/pettracker/video/" + filename);
         if (videoUrl == null) {
@@ -295,14 +293,14 @@ public class PetController {
             return;
         }
 
-        // ❷ 停掉並釋放舊的 MediaPlayer（若之前有在播放）
+        // 停掉並釋放舊的 MediaPlayer
         MediaPlayer oldPlayer = petMediaView.getMediaPlayer();
         if (oldPlayer != null) {
             oldPlayer.stop();
             oldPlayer.dispose();
         }
 
-        // ❸ 建立新的 MediaPlayer，並綁定到 MediaView
+        // 建立新的 MediaPlayer，並綁定到 MediaView
         Media media = new Media(videoUrl.toExternalForm());
         MediaPlayer newPlayer = new MediaPlayer(media);
         // 如果想要一直循環播放，可以打開下一行；否則可拿掉

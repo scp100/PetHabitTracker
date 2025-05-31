@@ -76,7 +76,7 @@ public class TaskController {
                     animationController.playTaskCompletionAnimation();
                 }
 
-                MessageUtil.showCelebration(String.format("🎉 批量完成了 %d 個任務！", completedCount));
+                MessageUtil.showCelebration(String.format("批量完成了 %d 個任務！", completedCount));
             }
         });
     }
@@ -99,7 +99,7 @@ public class TaskController {
                 List<Task> tasksToDelete = new ArrayList<>(selectedTasks);
                 allTasks.removeAll(tasksToDelete);
 
-                MessageUtil.showMessage(String.format("🗑️ 已刪除 %d 個任務", tasksToDelete.size()));
+                MessageUtil.showMessage(String.format("已刪除 %d 個任務", tasksToDelete.size()));
             }
         });
     }

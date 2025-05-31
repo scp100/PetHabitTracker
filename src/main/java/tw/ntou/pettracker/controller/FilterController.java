@@ -50,8 +50,8 @@ public class FilterController {
         this.filterPriorityBox = filterPriorityBox;
         if (filterPriorityBox != null) {
             filterPriorityBox.setItems(FXCollections.observableArrayList(
-                    "全部優先級", "🔴 高 (1)", "🟠 中高 (2)",
-                    "🟡 中 (3)", "🟢 中低 (4)", "🔵 低 (5)"
+                    "全部優先級", "(1) 高", "(2) 中高",
+                    "(3) 中", "(4) 中低 ", "(5) 低 "
             ));
             filterPriorityBox.getSelectionModel().select(0);
             filterPriorityBox.setOnAction(e -> applyFilters());
@@ -63,7 +63,7 @@ public class FilterController {
         this.filterStatusBox = filterStatusBox;
         if (filterStatusBox != null) {
             filterStatusBox.setItems(FXCollections.observableArrayList(
-                    "全部狀態", "⏳ 進行中", "✅ 已完成", "⏰ 今日到期", "📅 逾期"
+                    "全部狀態", "進行中", "已完成", "今日到期", "逾期"
             ));
             filterStatusBox.getSelectionModel().select(0);
             filterStatusBox.setOnAction(e -> applyFilters());
@@ -75,11 +75,11 @@ public class FilterController {
         this.sortBox = sortBox;
         if (sortBox != null) {
             sortBox.setItems(FXCollections.observableArrayList(
-                    "📅 按日期排序",
-                    "⭐ 按優先級排序",
-                    "📝 按名稱排序",
-                    "✅ 按完成狀態排序",
-                    "📂 按類別排序"
+                    "按日期排序",
+                    "按優先級排序",
+                    "按名稱排序",
+                    "按完成狀態排序",
+                    "按類別排序"
             ));
             sortBox.getSelectionModel().select(0);
             sortBox.setOnAction(e -> applySorting(sortBox.getValue()));
@@ -125,7 +125,7 @@ public class FilterController {
         applyFilters();
         applySorting(sortBox != null ? sortBox.getValue() : null);
 
-        MessageUtil.showMessage("🗑️ 已清除所有篩選條件");
+        MessageUtil.showMessage("已清除所有篩選條件");
     }
 
     /** 套用搜尋、優先級、狀態、視圖模式篩選 */
@@ -143,20 +143,20 @@ public class FilterController {
 
         Comparator<Task> comp;
         switch (sortOption) {
-            case "⭐ 按優先級排序":
+            case "按優先級排序":
                 comp = Comparator.comparing(Task::getPriority)
                         .thenComparing(Task::getDueDate);
                 break;
-            case "📝 按名稱排序":
+            case "按名稱排序":
                 comp = Comparator.comparing(
                         Task::getDescription, String.CASE_INSENSITIVE_ORDER
                 );
                 break;
-            case "✅ 按完成狀態排序":
+            case "按完成狀態排序":
                 comp = Comparator.comparing(Task::isDone)
                         .thenComparing(Task::getDueDate);
                 break;
-            case "📂 按類別排序":
+            case "按類別排序":
                 comp = Comparator
                         .<Task,String>comparing(t ->
                                 t.getCategory() != null
@@ -165,7 +165,7 @@ public class FilterController {
                         )
                         .thenComparing(Task::getDueDate);
                 break;
-            case "📅 按日期排序":
+            case "按日期排序":
             default:
                 comp = Comparator.comparing(Task::getDueDate)
                         .thenComparing(Task::getPriority);
@@ -226,10 +226,10 @@ public class FilterController {
         String sel = filterStatusBox.getSelectionModel().getSelectedItem();
         LocalDate today = LocalDate.now();
         switch (sel) {
-            case "⏳ 進行中":   return t -> !t.isDone();
-            case "✅ 已完成":   return Task::isDone;
-            case "⏰ 今日到期": return t -> t.getDueDate().equals(today) && !t.isDone();
-            case "📅 逾期":     return t -> t.getDueDate().isBefore(today) && !t.isDone();
+            case "進行中":   return t -> !t.isDone();
+            case "已完成":   return Task::isDone;
+            case "今日到期": return t -> t.getDueDate().equals(today) && !t.isDone();
+            case "逾期":     return t -> t.getDueDate().isBefore(today) && !t.isDone();
             default:           return t -> true;
         }
     }

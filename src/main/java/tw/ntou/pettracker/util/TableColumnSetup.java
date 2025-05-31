@@ -73,8 +73,8 @@ public class TableColumnSetup {
 
         // 操作按鈕列
         deleteCol.setCellFactory(param -> new TableCell<>() {
-            private final Button deleteButton = new Button("🗑️");
-            private final Button editButton = new Button("✏️");
+            private final Button deleteButton = new Button("刪除");
+            private final Button editButton = new Button("編輯");
             private final HBox buttonBox = new HBox(4);
 
             {

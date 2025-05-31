@@ -81,8 +81,8 @@ public class NotificationService {
 
             // 添加右鍵選單
             PopupMenu popup = new PopupMenu();
-            MenuItem showItem = new MenuItem("顯示主視窗");
-            MenuItem exitItem = new MenuItem("退出");
+            MenuItem showItem = new MenuItem("show main window");
+            MenuItem exitItem = new MenuItem("exit");
 
             popup.add(showItem);
             popup.addSeparator();

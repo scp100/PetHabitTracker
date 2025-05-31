@@ -58,7 +58,7 @@ public class AchievementManager {
                     "task_500",
                     "任務之神",
                     "完成500個任務",
-                    "⚡",
+                    " ⚡ ",
                     500,
                     Achievement.AchievementType.TASK_COMPLETION,
                     500
@@ -161,7 +161,7 @@ public class AchievementManager {
                     "priority_master",
                     "優先級大師",
                     "完成20個高優先級任務",
-                    "⚡",
+                    " ⚡ ",
                     80,
                     Achievement.AchievementType.PRODUCTIVITY,
                     20
@@ -191,7 +191,7 @@ public class AchievementManager {
                     "speed_demon",
                     "極速達人",
                     "一小時內完成5個任務",
-                    "⚡",
+                    " ⚡ ",
                     80,
                     Achievement.AchievementType.PRODUCTIVITY,
                     5
@@ -262,7 +262,7 @@ public class AchievementManager {
                     "weekend_warrior",
                     "週末戰士",
                     "連續4個週末都完成任務",
-                    "⚔️",
+                    "⚔ ",
                     80,
                     Achievement.AchievementType.SPECIAL,
                     4

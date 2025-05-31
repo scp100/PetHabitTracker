@@ -76,7 +76,7 @@
               </padding>
 
               <TextField fx:id="descField"
-                         promptText="➕ 快速新增任務... (例: 明天 運動 30分鐘)"
+                         promptText="快速新增任務... (例: 明天 運動 30分鐘)"
                          styleClass="quick-add-input"
                          onAction="#onAddTask"
                          HBox.hgrow="ALWAYS"/>
@@ -85,7 +85,7 @@
               <ComboBox fx:id="prioBox" styleClass="priority-combo" prefWidth="100"/>
               <ComboBox fx:id="categoryFilter" styleClass="category-combo"
                         promptText="選擇類別" prefWidth="120"/>
-              <Button text="➕ 新增" styleClass="add-button"
+              <Button text="新增" styleClass="add-button"
                       onAction="#onAddTask"/>
             </HBox>
 
@@ -96,7 +96,7 @@
               </padding>
 
               <TextField fx:id="searchField"
-                         promptText="🔍 搜索任務..."
+                         promptText="搜索任務..."
                          styleClass="search-input"
                          prefWidth="200"/>
 
@@ -110,17 +110,17 @@
                         styleClass="filter-combo"
                         prefWidth="100"/>
 
-              <Button fx:id="clearFiltersBtn" text="🗑️ 清除篩選"
+              <Button fx:id="clearFiltersBtn" text="清除篩選"
                       styleClass="clear-filter-btn"
                       onAction="#onClearFilters"/>
 
               <Region HBox.hgrow="ALWAYS"/>
 
               <!-- 批量操作按鈕 -->
-              <Button fx:id="batchCompleteBtn" text="✅ 批量完成"
+              <Button fx:id="batchCompleteBtn" text="批量完成"
                       styleClass="batch-btn" visible="false"
                       onAction="#onBatchComplete"/>
-              <Button fx:id="batchDeleteBtn" text="🗑️ 批量刪除"
+              <Button fx:id="batchDeleteBtn" text="批量刪除"
                       styleClass="batch-btn-danger" visible="false"
                       onAction="#onBatchDelete"/>
 
@@ -146,7 +146,7 @@
                                  styleClass="priority-column"/>
                     <TableColumn fx:id="categoryCol" text="類別" prefWidth="100"
                                  styleClass="category-column"/>
-                    <TableColumn fx:id="deleteCol" text="操作" prefWidth="80"
+                    <TableColumn fx:id="deleteCol" text="操作" prefWidth="120"
                                  resizable="false" styleClass="action-column"/>
                   </columns>
                   <placeholder>

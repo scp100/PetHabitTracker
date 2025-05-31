@@ -28,36 +28,38 @@ public class Main extends Application {
             primaryStage.setOnCloseRequest(e -> {
                 Persistence.saveTasks(controller.getTaskList());
                 System.out.println("💾 資料已保存");
+
+                javafx.application.Platform.exit();
+                System.exit(0);
             });
 
             // 設定窗口屬性
             primaryStage.setScene(scene);
-            primaryStage.setTitle("🐱 Pet Habit Tracker - 現代化版本");
-            primaryStage.setMinWidth(1000);  // 設定最小寬度
-            primaryStage.setMinHeight(600);   // 設定最小高度
+            primaryStage.setTitle("🐱 Pet Habit Tracker");
+            primaryStage.setMaximized(true);
 
             // 設定窗口圖標（如果有的話）
             try {
                 primaryStage.getIcons().add(new javafx.scene.image.Image(
                         getClass().getResource("/tw/ntou/pettracker/icon/cat.png").toExternalForm()));
             } catch (Exception e) {
-                System.out.println("⚠️ 無法載入應用程式圖標");
+                System.out.println("無法載入應用程式圖標");
             }
 
             primaryStage.show();
 
-            System.out.println("🚀 Pet Habit Tracker 現代化版本啟動成功！");
-            System.out.println("📱 窗口大小: 1200x800");
-            System.out.println("🎨 現代化界面已載入");
+            System.out.println("Pet Habit Tracker 現代化版本啟動成功！");
+            System.out.println("窗口大小: 全螢幕");
+            System.out.println("現代化界面已載入");
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("❌ 應用程式啟動失敗: " + e.getMessage());
+            System.err.println("應用程式啟動失敗: " + e.getMessage());
         }
     }
 
     public static void main(String[] args) {
-        System.out.println("🐾 正在啟動 Pet Habit Tracker...");
+        System.out.println("正在啟動 Pet Habit Tracker...");
         launch(args);
     }
 }

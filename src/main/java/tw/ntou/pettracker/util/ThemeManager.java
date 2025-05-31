@@ -124,7 +124,7 @@ public class ThemeManager {
         ToggleGroup themeGroup = new ToggleGroup();
 
         // 只顯示淺色和深色主題
-        RadioButton lightRadio = new RadioButton("☀️ 淺色主題");
+        RadioButton lightRadio = new RadioButton("☀淺色主題");
         lightRadio.setUserData("light");
         lightRadio.setToggleGroup(themeGroup);
 

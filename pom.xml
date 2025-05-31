@@ -14,32 +14,28 @@
     <name>PetHabitTracker</name>
     <description>寵物習慣追蹤與影片播放應用程式</description>
 
-    <!-- 二、Properties 區塊：設定 Java 與 JavaFX 版本，以及平台 classifier -->
+
     <properties>
-        <!-- 2.1 Java 編譯版本：都使用 Java 21 -->
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <!-- 2.2 JavaFX 版本：因為您用 JDK21，所以對應 OpenJFX 21.0.2 -->
+
         <javafx.version>21.0.2</javafx.version>
-        <!-- 2.3 平台 classifier：因為您是 Windows x64，就用 win -->
-        <!-- 如果您切換到 macOS (Intel) 版，要改成 mac；mac M1/M2 請改 mac-aarch64 -->
-        <!-- Linux x64 用 linux；Linux ARM64 用 linux-aarch64 -->
         <javafx.platform>win</javafx.platform>
     </properties>
 
-    <!-- 三、依賴 (Dependencies) -->
+
     <dependencies>
-        <!-- 3.1 JavaFX Base (純 Java API，不含 native code) -->
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
             <version>${javafx.version}</version>
-            <!-- javafx-base 不需要 native code classifier，不加 classifier 也能下載 -->
+
         </dependency>
 
-        <!-- 3.2 JavaFX Graphics (需要 native code，包含 Scene Graph、Canvas 等) -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
@@ -47,7 +43,6 @@
             <classifier>${javafx.platform}</classifier>
         </dependency>
 
-        <!-- 3.3 JavaFX Controls (UI 元件，會 transitively 牽涉到 javafx-graphics & javafx-base) -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -55,7 +50,6 @@
             <classifier>${javafx.platform}</classifier>
         </dependency>
 
-        <!-- 3.4 JavaFX FXML (需要 native code，讓您在 FXML 裡用 <MediaView>、<Button>、<TableView> 等) -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
@@ -63,7 +57,6 @@
             <classifier>${javafx.platform}</classifier>
         </dependency>
 
-        <!-- 3.5 JavaFX Media (最重要！需要 native code，提供 Media, MediaPlayer, MediaView 等功能) -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
@@ -71,14 +64,12 @@
             <classifier>${javafx.platform}</classifier>
         </dependency>
 
-        <!-- 3.6 ControlsFX (可選，用於更進階的通知／controls，如果您不需要可刪掉這段) -->
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
             <version>11.1.2</version>
         </dependency>
 
-        <!-- 3.7 Jackson JSON 處理（可根據您實際使用狀況決定要不要保留） -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -90,7 +81,6 @@
             <version>2.17.0</version>
         </dependency>
 
-        <!-- 3.8 JUnit 測試（示範改成可正確下載的版本 4.13.2） -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -99,38 +89,31 @@
         </dependency>
     </dependencies>
 
-    <!-- 四、Build Plugins：包含 maven-compiler-plugin 及 javafx-maven-plugin -->
     <build>
         <plugins>
-            <!-- 4.1 maven-compiler-plugin：指定用 Java 21 編譯 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <!-- 您沒有使用 module-info.java，所以我們直接用 source/target -->
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
 
-            <!-- 4.2 javafx-maven-plugin：讓您在終端或 IntelliJ 裡能 mvn javafx:run 一鍵啟動 -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <!-- 請改成您自己專案的 Main 類別 (含完整 package)，例如 tw.ntou.pettracker.Main -->
                     <mainClass>tw.ntou.pettracker.Main</mainClass>
                     <options>
-                        <!-- 明確告訴 JVM 要載入哪幾個 JavaFX 模組 -->
                         <option>--add-modules=javafx.controls,javafx.fxml,javafx.media</option>
                     </options>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
-                            <!-- 這樣您就能在命令列或 IntelliJ 的 Maven Plugin 視窗執行 mvn javafx:run -->
                             <goal>run</goal>
                         </goals>
                     </execution>

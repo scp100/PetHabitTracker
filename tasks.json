@@ -1,6 +1,6 @@
 [ {
-  "description" : "exercie",
-  "done" : true,
+  "description" : "exercise",
+  "done" : false,
   "dueDate" : "2025-05-31",
   "priority" : 4,
   "remind" : false,
