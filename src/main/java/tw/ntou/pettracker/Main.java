@@ -15,7 +15,13 @@ public class Main extends Application {
             Parent root = loader.load();
 
             // 創建場景並設定尺寸 (增大窗口以容納新布局)
-            Scene scene = new Scene(root, 1200, 800);
+            ScrollPane scrollPane = new ScrollPane(root);
+
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(false);
+
+
+            Scene scene = new Scene(scrollPane);
 
             // 載入樣式表 (使用更新後的樣式)
             scene.getStylesheets().add(
