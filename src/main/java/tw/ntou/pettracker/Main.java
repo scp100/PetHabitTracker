@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.ScrollPane;
+import tw.ntou.pettracker.model.WindowSetting;
 
 public class Main extends Application {
     @Override
@@ -29,21 +30,20 @@ public class Main extends Application {
                     getClass().getResource("app.css").toExternalForm());
             scene.getStylesheets().add(
                     getClass().getResource("style.css").toExternalForm());
-
+            // 設定窗口屬性
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("🐱 Pet Habit Tracker");
+            primaryStage.setMaximized(true);
             // 獲取控制器並設定關閉事件
             MainController controller = loader.getController();
             primaryStage.setOnCloseRequest(e -> {
                 Persistence.saveTasks(controller.getTaskList());
+                Persistence.saveWindowSettings(controller.saveState(primaryStage));
                 System.out.println("💾 資料已保存");
 
                 javafx.application.Platform.exit();
                 System.exit(0);
             });
-
-            // 設定窗口屬性
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("🐱 Pet Habit Tracker");
-            primaryStage.setMaximized(true);
 
             // 設定窗口圖標（如果有的話）
             try {
@@ -53,6 +53,19 @@ public class Main extends Application {
                 System.out.println("無法載入應用程式圖標");
             }
 
+            WindowSetting settings = Persistence.loadWindowSettings();
+            System.out.println("讀取設定檔: maximized=" + settings.isMaximized());
+
+            //讀取設定大小
+            if (!settings.isMaximized()) {
+                String[] dims = settings.getResolution().split("x");
+                int width = Integer.parseInt(dims[0]);
+                int height = Integer.parseInt(dims[1]);
+                primaryStage.setWidth(width);
+                primaryStage.setHeight(height);
+                primaryStage.centerOnScreen();
+            }
+            primaryStage.setMaximized(settings.isMaximized());//決定是否全螢幕，如果顛倒會判斷錯誤。
             primaryStage.show();
 
             System.out.println("Pet Habit Tracker 現代化版本啟動成功！");

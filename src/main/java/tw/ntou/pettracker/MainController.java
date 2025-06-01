@@ -64,6 +64,13 @@ import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.concurrent.CompletableFuture;
 
+import java.awt.*;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import tw.ntou.pettracker.model.WindowSetting;
 
 /**
  * 主控制器 - 負責協調各個子控制器和服務
@@ -653,6 +660,16 @@ public class MainController implements Initializable {
     public ObservableList<Task> getTaskList() {
         return tasks;
     }
+    public WindowSetting saveState(Stage stage){
+        WindowSetting settings = new WindowSetting();
+        settings.setMaximized(stage.isMaximized());
+
+        if (!stage.isMaximized()) {
+            String resolution = (int) stage.getWidth() + "x" + (int) stage.getHeight();
+            settings.setResolution(resolution);
+        }
+        return settings;
+    }
 
     public Pet getPet() {
         return pet;
@@ -661,5 +678,79 @@ public class MainController implements Initializable {
     public void shutdown() {
         Persistence.saveTasks(tasks);
         notificationService.shutdown();
+    }
+
+    @FXML
+    private void onSettingsClicked() {
+        //建立彈出視窗
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("設定");
+
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(10));
+        //取得視窗(為了控制視窗大小)
+        Stage stage = (Stage) settingsBtn.getScene().getWindow();
+
+        // 解析度選擇下拉式選單
+        Label resolutionLabel = new Label("解析度");
+        ComboBox<String> resolutionComboBox = new ComboBox<>();
+        resolutionComboBox.getItems().addAll(
+                "800x600", "1024x768", "1280x720" , "1200x800"
+        );
+
+        // 預設選項可依照目前視窗大小判斷
+        String currentSize = (int)stage.getWidth() + "x" + (int)stage.getHeight();
+        resolutionComboBox.setValue(currentSize);
+        //將解析度下拉選單跟文字放在同一列
+        HBox resolutionBox = new HBox(5); // 5 是間距，可以調整
+        resolutionBox.getChildren().addAll(resolutionLabel, resolutionComboBox);
+
+        //視窗大小是否最大化，勾選清單會引響解析度下拉選單
+        CheckBox maximizeCheckBox = new CheckBox("最大化");
+        maximizeCheckBox.setSelected(stage.isMaximized());
+        maximizeCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {stage.setMaximized(newVal);});
+
+        // 改變解析度時，立即套用，如果使用其他解析度會取消最大化
+        resolutionComboBox.setOnAction(e -> {
+
+            String selected = resolutionComboBox.getValue();
+            if (selected != null) {
+                String[] dims = selected.split("x");
+                int width = Integer.parseInt(dims[0]);
+                int height = Integer.parseInt(dims[1]);
+
+                stage.setMaximized(false);
+                maximizeCheckBox.setSelected(false);
+
+                stage.setWidth(width);
+                stage.setHeight(height);
+                stage.centerOnScreen(); // 選用：讓視窗置中
+            }
+        });
+
+        // 背景執行按鈕
+        Button backgroundBtn = new Button("背景執行");
+        backgroundBtn.setOnAction(e -> {
+            stage.hide();//隱藏主畫面
+            dialog.close();//關閉設定頁面
+        });
+
+        //關閉系統
+        Button exitButton = new Button("結束程式");
+        exitButton.setOnAction(e -> {
+            // 儲存任務資料
+            Persistence.saveTasks(getTaskList());
+            Persistence.saveWindowSettings(saveState(stage));
+            System.out.println("💾 資料已保存");
+            Platform.exit();
+            System.exit(0);
+        });
+
+        // 加入所有控制元件
+        content.getChildren().addAll(maximizeCheckBox, resolutionBox,backgroundBtn, exitButton);
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
     }
 }
