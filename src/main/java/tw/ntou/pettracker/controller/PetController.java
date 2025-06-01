@@ -214,12 +214,14 @@ public class PetController {
     private void checkFeedingAchievement() {
         if (pet.getFullness() >= 100) {
             // 觸發「美食家」成就
+
         }
     }
 
     private void checkPlayAchievement() {
         if (pet.getSatisfaction() >= 100) {
             // 觸發「快樂夥伴」成就
+
         }
     }
 

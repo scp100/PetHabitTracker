@@ -28,6 +28,7 @@ public class PetVideoGalleryDialog extends Dialog<PetVideoService.PetVideo> {
     private GridPane videoGrid;
     private Label statsLabel;
     private PetVideoType.VideoCategory currentCategory = null;
+    private PetVideoService.PetVideo selectedVideo = null;// 用來記錄使用者選擇的影片
 
     public PetVideoGalleryDialog() {
         setTitle("🎬 寵物影片相簿");
@@ -60,13 +61,23 @@ public class PetVideoGalleryDialog extends Dialog<PetVideoService.PetVideo> {
         mainPane.setRight(playerPane);
 
         getDialogPane().setContent(mainPane);
-        getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        ButtonType selectButtonType = new ButtonType("選擇", ButtonBar.ButtonData.OK_DONE);
+        getDialogPane().getButtonTypes().addAll(selectButtonType, ButtonType.CANCEL);
 
         // 套用樣式
         getDialogPane().getStyleClass().add("video-gallery-dialog");
 
         // ---- 建立完所有元件後，才正式呼叫一次 refreshVideoGrid() ----
         refreshVideoGrid();
+
+        // 設定回傳結果
+        setResultConverter(button -> {
+            if (button == selectButtonType && selectedVideo != null) {
+                return selectedVideo;
+            }
+            return null;
+        });
 
         // 清理資源
         setOnCloseRequest(e -> {
@@ -75,6 +86,7 @@ public class PetVideoGalleryDialog extends Dialog<PetVideoService.PetVideo> {
                 currentPlayer.dispose();
             }
         });
+
     }
 
     /**
@@ -294,7 +306,11 @@ public class PetVideoGalleryDialog extends Dialog<PetVideoService.PetVideo> {
         });
 
         // 點擊播放
-        card.setOnMouseClicked(e -> playVideo(video));
+        card.setOnMouseClicked(e -> {
+            playVideo(video); // 播放影片
+            selectedVideo = video;
+        });
+
 
         return card;
     }

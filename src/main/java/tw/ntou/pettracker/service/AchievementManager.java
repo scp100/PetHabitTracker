@@ -365,6 +365,7 @@ public class AchievementManager {
      * 檢查完美一週成就
      */
     private static boolean checkPerfectWeek(Object... params) {
+
         // 實現檢查邏輯
         // 這裡需要檢查一週內是否所有計劃的任務都完成了
         return true; // 簡化實現

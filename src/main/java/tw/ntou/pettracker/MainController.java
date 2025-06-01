@@ -579,12 +579,14 @@ public class MainController implements Initializable {
     private void onShowVideoGallery() {
         System.out.println(">>> 已進入 onShowVideoGallery() 方法");
         PetVideoGalleryDialog dialog = new PetVideoGalleryDialog();
+
         dialog.showAndWait().ifPresent(selectedVideo -> {
-            if (selectedVideo != null) {
-                playVideoOnMediaView(selectedVideo);
-            }
+            System.out.println("選擇的影片路徑：" + selectedVideo);
+            playVideoOnMediaView(selectedVideo);
         });
     }
+
+
 
     /**
      * 把 PetVideo 綁給 petMediaView 播放
