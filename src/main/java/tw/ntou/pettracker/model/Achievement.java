@@ -14,7 +14,7 @@ public class Achievement {
     private final ObjectProperty<AchievementType> type = new SimpleObjectProperty<>();
     private final IntegerProperty progress = new SimpleIntegerProperty(0);
     private final IntegerProperty maxProgress = new SimpleIntegerProperty(1);
-
+    private final BooleanProperty notificationShown = new SimpleBooleanProperty(false);
     // 成就類型
     public enum AchievementType {
         TASK_COMPLETION("任務完成", "✅"),
@@ -103,5 +103,10 @@ public class Achievement {
     public int getMaxProgress() { return maxProgress.get(); }
     public void setMaxProgress(int value) { maxProgress.set(value); }
     public IntegerProperty maxProgressProperty() { return maxProgress; }
+
+    public boolean isNotificationShown() { return notificationShown.get(); }
+    public void setNotificationShown(boolean value) { notificationShown.set(value); }
+    public BooleanProperty notificationShownProperty() { return notificationShown; }
+
 }
 

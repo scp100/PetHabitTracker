@@ -1,0 +1,79 @@
+[ {
+  "id" : "first_task",
+  "unlocked" : true
+}, {
+  "id" : "task_10",
+  "unlocked" : true
+}, {
+  "id" : "task_50",
+  "unlocked" : false
+}, {
+  "id" : "task_100",
+  "unlocked" : false
+}, {
+  "id" : "task_500",
+  "unlocked" : false
+}, {
+  "id" : "streak_3",
+  "unlocked" : false
+}, {
+  "id" : "streak_7",
+  "unlocked" : false
+}, {
+  "id" : "streak_30",
+  "unlocked" : false
+}, {
+  "id" : "streak_100",
+  "unlocked" : false
+}, {
+  "id" : "pet_happy",
+  "unlocked" : false
+}, {
+  "id" : "pet_full",
+  "unlocked" : false
+}, {
+  "id" : "pet_play_10",
+  "unlocked" : false
+}, {
+  "id" : "pet_feed_20",
+  "unlocked" : false
+}, {
+  "id" : "pet_perfect_week",
+  "unlocked" : false
+}, {
+  "id" : "priority_master",
+  "unlocked" : false
+}, {
+  "id" : "early_bird",
+  "unlocked" : true
+}, {
+  "id" : "night_owl",
+  "unlocked" : false
+}, {
+  "id" : "speed_demon",
+  "unlocked" : false
+}, {
+  "id" : "planner",
+  "unlocked" : false
+}, {
+  "id" : "perfect_week",
+  "unlocked" : false
+}, {
+  "id" : "comeback",
+  "unlocked" : false
+}, {
+  "id" : "multitasker",
+  "unlocked" : false
+}, {
+  "id" : "zero_overdue",
+  "unlocked" : false
+}, {
+  "id" : "all_categories",
+  "unlocked" : false
+}, {
+  "id" : "weekend_warrior",
+  "unlocked" : false
+}, {
+  "id" : "subtask_master",
+  "unlocked" : false
+} ]

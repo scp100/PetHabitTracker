@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import tw.ntou.pettracker.Persistence;
 import tw.ntou.pettracker.model.Achievement;
 import tw.ntou.pettracker.model.Task;
 import tw.ntou.pettracker.service.NotificationService;
@@ -27,6 +28,7 @@ public class AchievementController {
     private Button achievementButton;
     private Label streakLabel;
     private NotificationService notificationService;
+    private int maxCompletedCount = 0;
 
     // 追蹤特定成就的進度
     private int playWithPetCount = 0;
@@ -77,11 +79,12 @@ public class AchievementController {
      */
     private void checkTaskCompletionAchievements() {
         long completedCount = tasks.stream().filter(Task::isDone).count();
+        maxCompletedCount = Math.max(maxCompletedCount, (int) completedCount);
 
-        checkAndUnlockAchievement("first_task", (int) completedCount);
-        checkAndUnlockAchievement("task_10", (int) completedCount);
-        checkAndUnlockAchievement("task_50", (int) completedCount);
-        checkAndUnlockAchievement("task_100", (int) completedCount);
+        checkAndUnlockAchievement("first_task", (int) maxCompletedCount);
+        checkAndUnlockAchievement("task_10", (int) maxCompletedCount);
+        checkAndUnlockAchievement("task_50", (int) maxCompletedCount);
+        checkAndUnlockAchievement("task_100", (int) maxCompletedCount);
 
         long highPriorityCompleted = tasks.stream()
                 .filter(Task::isDone)
@@ -171,10 +174,14 @@ public class AchievementController {
                 .findFirst()
                 .orElse(null);
 
-        if (achievement != null && !achievement.isUnlocked()) {
+        if (achievement != null) {
             achievementProgress.put(achievementId, progress);
+            boolean unlocked = achievement.checkUnlock(progress);
 
-            if (achievement.checkUnlock(progress)) {
+            if (unlocked && !achievement.isNotificationShown()) {
+
+                achievement.setNotificationShown(true);
+
                 // 顯示成就解鎖通知
                 if (notificationService != null) {
                     notificationService.showAchievementNotification(
@@ -183,8 +190,10 @@ public class AchievementController {
                             achievement.getPoints()
                     );
                 }
-                // 新增：解鎖相關影片
+                    // 解鎖相關影片
                 unlockRelatedVideos(achievementId);
+
+                Persistence.saveAchievementsStatus(achievements);
             }
         }
     }

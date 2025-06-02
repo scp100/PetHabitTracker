@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.ScrollPane;
+import tw.ntou.pettracker.model.Achievement;
+import tw.ntou.pettracker.service.AchievementManager;
 
 public class Main extends Application {
     @Override
@@ -32,8 +34,13 @@ public class Main extends Application {
 
             // 獲取控制器並設定關閉事件
             MainController controller = loader.getController();
+
+            Persistence.loadAchievementsStatus(AchievementManager.getAllAchievements());
+            System.out.println("成就載入完畢");
+
             primaryStage.setOnCloseRequest(e -> {
                 Persistence.saveTasks(controller.getTaskList());
+                Persistence.saveAchievementsStatus(AchievementManager.getAllAchievements());
                 System.out.println("💾 資料已保存");
 
                 javafx.application.Platform.exit();

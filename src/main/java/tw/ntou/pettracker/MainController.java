@@ -31,11 +31,8 @@ import javafx.scene.media.MediaPlayer;         // ←【務必】 import MediaPl
 import javafx.scene.media.MediaView;           // ←【務必】 import MediaView
 import javafx.util.Duration;
 
-import tw.ntou.pettracker.model.Pet;
-import tw.ntou.pettracker.model.PetVideoType;
-import tw.ntou.pettracker.model.Task;
+import tw.ntou.pettracker.model.*;
 import tw.ntou.pettracker.model.Task.TaskCategory;
-import tw.ntou.pettracker.model.ViewMode;
 
 import tw.ntou.pettracker.service.NotificationService;
 import tw.ntou.pettracker.service.PetVideoService;
@@ -60,6 +57,7 @@ import tw.ntou.pettracker.util.TaskMemento;          // ←【務必】 import T
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.concurrent.CompletableFuture;
@@ -662,4 +660,6 @@ public class MainController implements Initializable {
         Persistence.saveTasks(tasks);
         notificationService.shutdown();
     }
+
+
 }

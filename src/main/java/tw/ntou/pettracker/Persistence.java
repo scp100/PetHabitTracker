@@ -2,6 +2,8 @@ package tw.ntou.pettracker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import tw.ntou.pettracker.model.Achievement;
+import tw.ntou.pettracker.model.AchievementData;
 import tw.ntou.pettracker.model.Task;
 import tw.ntou.pettracker.model.TaskData;
 
@@ -14,7 +16,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class Persistence {
     private static final ObjectMapper mapper = new ObjectMapper();
-    private static final File FILE = new File("tasks.json");// 在 Persistence 类的顶部添加导入
+    private static final File FILE = new File("tasks.json");
+    private static final File ACHIEVEMENTS_FILE = new File("achievements.json");
 
     // 時間格式化的 eg. 2025-05-12
     static {
@@ -57,4 +60,43 @@ public class Persistence {
             return new ArrayList<>();
         }
     }
+
+    public static void saveAchievementsStatus(List<Achievement> achievements) {
+        List<AchievementData> dataList = new ArrayList<>();
+        for (Achievement achievement : achievements) {
+            dataList.add(AchievementConverter.toData(achievement));
+        }
+
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(ACHIEVEMENTS_FILE, dataList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadAchievementsStatus(List<Achievement> achievements) {
+        if (!ACHIEVEMENTS_FILE.exists()) {
+            return;
+        }
+
+        try {
+            CollectionType listType = mapper.getTypeFactory()
+                    .constructCollectionType(List.class, AchievementData.class);
+            List<AchievementData> dataList = mapper.readValue(ACHIEVEMENTS_FILE, listType);
+
+            for (AchievementData data : dataList) {
+                for (Achievement achievement : achievements) {
+                    if (achievement.getId().equals(data.id)) {
+                        AchievementConverter.fromData(data, achievement);
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
