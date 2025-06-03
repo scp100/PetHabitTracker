@@ -32,6 +32,7 @@ public class PetController {
     private AnimationController animationController;
     private Button feedButton;
     private Button playButton;
+    private Label playChanceLabel;
 
     // 處理影片播放的服務
     private final PetVideoService videoService = PetVideoService.getInstance();
@@ -62,10 +63,11 @@ public class PetController {
         }
     }
 
-    public void setPlayButton(Button playButton) {
+    public void setPlayButton(Button playButton, Label playChanceLabel) {
         this.playButton = playButton;
         if (playButton != null) {
             playButton.setOnAction(e -> playWithPet());
+            updatePlayChanceLabel();
         }
     }
 
@@ -125,19 +127,26 @@ public class PetController {
      * 和寵物玩耍
      */
     private void playWithPet() {
-        pet.play();
-        if (animationController != null) {
-            animationController.playPetAnimation();
-        }
-        MessageUtil.showMessage("🎾 你和寵物玩耍，它很興奮！");
+        System.out.print(pet.getPlayChances()+"\n");
+        if (pet.getPlayChances()> 0) {
+            pet.play(); // 呼叫 model（Pet.java）邏輯
+            pet.usePlayChance();
+            updatePlayChanceLabel();
+            if (animationController != null) {
+                animationController.playPetAnimation();
+            }
+            MessageUtil.showMessage("🎾 你和寵物玩耍，它很興奮！");
 
-        // 播放「玩耍」類型影片 (PLAY)
-        PetVideo video = videoService.getRandomVideo(PetVideoType.PLAY);
-        if (video != null && petMediaView != null) {
-            playVideoOnMediaView(video);
-        }
+            // 播放「玩耍」類型影片 (PLAY)
+            PetVideo video = videoService.getRandomVideo(PetVideoType.PLAY);
+            if (video != null && petMediaView != null) {
+                playVideoOnMediaView(video);
+            }
 
-        checkPlayAchievement();
+            checkPlayAchievement();
+        } else {
+            MessageUtil.showMessage("沒有可用的玩耍次數！");
+        }
     }
 
     /**
@@ -311,5 +320,15 @@ public class PetController {
         petMediaView.setMediaPlayer(newPlayer);
         petMediaView.setVisible(true);  // 確保 MediaView 可見
         newPlayer.play();
+    }
+
+    public void setPlayChanceLabel(Label label) {
+        this.playChanceLabel = label;
+        updatePlayChanceLabel();
+    }
+    private void updatePlayChanceLabel() {
+        if (playChanceLabel != null) {
+            playChanceLabel.setText("剩餘玩耍次數：" + pet.getPlayChances());
+        }
     }
 }
