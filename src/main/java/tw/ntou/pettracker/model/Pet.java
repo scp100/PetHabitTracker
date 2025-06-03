@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import java.time.LocalDate;
 
 /**
  * 寵物 Model，包含滿意度、飽食度，以及根據狀態決定要播放哪段影片
@@ -12,6 +13,8 @@ public class Pet {
 
     // ===== 滿意度屬性 =====
     private final IntegerProperty satisfaction = new SimpleIntegerProperty(this, "satisfaction", 80);
+    private int playChances = 0;
+    private LocalDate lastRewardDate;
 
     public int getSatisfaction() {
         return satisfaction.get();
@@ -112,8 +115,12 @@ public class Pet {
      * 和寵物玩耍
      */
     public void play() {
+
+
         setSatisfaction(getSatisfaction() + 15);
         setFullness(Math.max(0, getFullness() - 5)); // 玩耍會稍微消耗飽食度
+
+        System.out.println("✅ 玩耍成功！剩餘次數：" + playChances);
     }
 
     /**
@@ -217,4 +224,13 @@ public class Pet {
             }
         });
     }
+
+    //獲得玩耍次數
+    public void addPlayChance(int amount) {playChances += amount;}
+    //使用玩耍次數
+    public void usePlayChance() {if (playChances > 0) {playChances--;}}
+    //回傳玩耍次數
+    public int getPlayChances() {return playChances;}
+    public LocalDate getLastRewardDate() { return lastRewardDate;}
+    public void setLastRewardDate(LocalDate date) { this.lastRewardDate = date;}
 }
