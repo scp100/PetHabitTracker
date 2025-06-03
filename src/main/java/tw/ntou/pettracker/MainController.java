@@ -84,6 +84,7 @@ import javafx.scene.control.ScrollPane;
 public class MainController implements Initializable {
 
     // ===== UI 元件 =====
+    @FXML private Label playChanceLabel;
     @FXML private Label totalTasksLabel;
     @FXML private Label completedTasksLabel;
     @FXML private Label pendingTasksLabel;
@@ -185,6 +186,8 @@ public class MainController implements Initializable {
 
         // 開始定期更新
         startPeriodicUpdates();
+        //設定初始化玩耍次數
+        initializeplayChance();
     }
 
     private void initializePet() {
@@ -202,7 +205,9 @@ public class MainController implements Initializable {
     private void initializeServices() {
         notificationService = NotificationService.getInstance();
     }
-
+    private void initializeplayChance(){
+        petController.setPlayChanceLabel(playChanceLabel);
+    }
     private void initializeControllers() {
         // 初始化動畫控制器
         animationController = new AnimationController(petImage, table, petPanel);
@@ -217,12 +222,13 @@ public class MainController implements Initializable {
                 satisfactionLabel, fullnessLabel);
         petController.setAnimationController(animationController);
         petController.setFeedButton(feedPetBtn);
-        petController.setPlayButton(playWithPetBtn);
+        petController.setPlayButton(playWithPetBtn,playChanceLabel);
 
         // 將 FXML 中的 MediaView 注入到 PetController，用來播放影片
         if (petMediaView != null) {
             petController.setPetMediaView(petMediaView);
         }
+
 
         // 初始化篩選控制器
         filterController = new FilterController(tasks);
@@ -558,12 +564,19 @@ public class MainController implements Initializable {
                         t.getCompletedAt().toLocalDate().equals(today))
                 .count();
 
-        if (todayCompleted == DAILY_GOAL) {
-            notificationService.showNotification(
-                    NotificationService.NotificationType.DAILY_GOAL_REACHED,
-                    "恭喜！您已達成今日目標！"
-            );
-            petController.celebrateDailyGoal();
+        if (todayCompleted >= DAILY_GOAL) {
+            if (Persistence.loadLastRewardDate() == null || !Persistence.loadLastRewardDate().equals(LocalDate.now())) {
+                // 沒領過，給獎勵
+                notificationService.showNotification(
+                        NotificationService.NotificationType.DAILY_GOAL_REACHED,
+                        "恭喜！您已達成今日目標，獲得2次玩耍機會！"
+                );
+                pet.addPlayChance(2);
+                pet.setLastRewardDate(LocalDate.now());
+                petController.celebrateDailyGoal();
+                Persistence.saveLastRewardDate(LocalDate.now());
+            }
+            playChanceLabel.setText("剩餘玩耍次數：" + pet.getPlayChances());
         }
     }
 
@@ -730,7 +743,9 @@ public class MainController implements Initializable {
             setting.setResolution(selectedRes);
             setting.setUndecorated(undecorated);
             Persistence.saveWindowSettings(setting);
-
+            Persistence.saveTasks(getTaskList());
+            Persistence.saveWindowSettings(saveState(stage));
+            System.out.println("💾 資料已保存");
             // 關閉目前視窗
             stage.close();
 

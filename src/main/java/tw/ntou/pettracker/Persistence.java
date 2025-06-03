@@ -2,10 +2,7 @@ package tw.ntou.pettracker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import tw.ntou.pettracker.model.Achievement;
-import tw.ntou.pettracker.model.AchievementData;
-import tw.ntou.pettracker.model.Task;
-import tw.ntou.pettracker.model.TaskData;
+import tw.ntou.pettracker.model.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,13 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import tw.ntou.pettracker.model.WindowSetting;
+
+import java.time.LocalDate;
 
 public class Persistence {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final File FILE = new File("tasks.json");
     private static final File ACHIEVEMENTS_FILE = new File("achievements.json");
     private static final File SETTINGS_FILE = new File("settings.json"); //設定控制文件
+    private static final File PET_FILE = new File("PET.json"); //設定控制文件
 
     // 時間格式化的 eg. 2025-05-12
     static {
@@ -125,6 +124,30 @@ public class Persistence {
             WindowSetting defaultSettings = new WindowSetting();
             defaultSettings.setUndecorated(false);
             return defaultSettings; // 預設空白設定
+        }
+    }
+
+    public static void saveLastRewardDate(LocalDate date) {
+        PetStatus status = new PetStatus();
+        status.setLastRewardDate(date.toString());
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(PET_FILE, status);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static LocalDate loadLastRewardDate() {
+        if (!PET_FILE.exists()) {
+            return null;
+        }
+
+        try {
+            PetStatus status = mapper.readValue(PET_FILE, PetStatus.class);
+            return LocalDate.parse(status.getLastRewardDate());
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
