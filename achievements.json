@@ -1,9 +1,9 @@
 [ {
   "id" : "first_task",
-  "unlocked" : true
+  "unlocked" : false
 }, {
   "id" : "task_10",
-  "unlocked" : true
+  "unlocked" : false
 }, {
   "id" : "task_50",
   "unlocked" : false
