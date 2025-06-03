@@ -61,6 +61,21 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.concurrent.CompletableFuture;
+import java.awt.*;
+
+import javafx.scene.control.Dialog;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import tw.ntou.pettracker.model.WindowSetting;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.StageStyle;
+import java.io.IOException;
+import javafx.scene.control.ScrollPane;
 
 
 /**
@@ -656,9 +671,123 @@ public class MainController implements Initializable {
         return pet;
     }
 
+    public WindowSetting saveState(Stage stage){
+        WindowSetting settings = new WindowSetting();
+        settings.setMaximized(stage.isMaximized());
+
+        if (!stage.isMaximized()) {
+            String resolution = (int) stage.getWidth() + "x" + (int) stage.getHeight();
+            settings.setResolution(resolution);
+        }
+        return settings;
+    }
+
     public void shutdown() {
         Persistence.saveTasks(tasks);
         notificationService.shutdown();
+    }
+
+    @FXML
+    private void onSettingsClicked() {
+        //建立彈出視窗
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("設定");
+
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(10));
+        //取得視窗(為了控制視窗大小)
+        Stage stage = (Stage) settingsBtn.getScene().getWindow();
+        //取得設定的數值
+        WindowSetting currentSetting = Persistence.loadWindowSettings();
+
+        // 解析度選擇下拉式選單
+        Label resolutionLabel = new Label("解析度");
+        ComboBox<String> resolutionComboBox = new ComboBox<>();
+        resolutionComboBox.getItems().addAll("800x600", "1024x768", "1280x720", "1200x800");
+        String currentSize = (int) stage.getWidth() + "x" + (int) stage.getHeight();
+        resolutionComboBox.setValue(currentSetting != null ? currentSetting.getResolution() : currentSize);
+        HBox resolutionBox = new HBox(5, resolutionLabel, resolutionComboBox);
+
+        // 最大化 CheckBox
+        CheckBox maximizeCheckBox = new CheckBox("最大化");
+        maximizeCheckBox.setSelected(currentSetting != null ? currentSetting.isMaximized() : stage.isMaximized());
+
+        //無邊框控制
+        CheckBox undecoratedCheckBox = new CheckBox("無邊框模式");
+        undecoratedCheckBox.setSelected(currentSetting != null && currentSetting.isUndecorated());
+
+
+        // 套用並重啟畫面按鈕
+        Button applyButton = new Button("套用");
+        applyButton.setOnAction(e -> {
+            boolean maximized = maximizeCheckBox.isSelected();
+            String selectedRes = resolutionComboBox.getValue();
+            boolean undecorated = undecoratedCheckBox.isSelected();
+
+            // 儲存設定，這邊請用你自己的Persistence或其他方式存取
+            WindowSetting setting = new WindowSetting();
+            setting.setMaximized(maximized);
+            setting.setResolution(selectedRes);
+            setting.setUndecorated(undecorated);
+            Persistence.saveWindowSettings(setting);
+
+            // 關閉目前視窗
+            stage.close();
+
+            // 重新開啟主視窗
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+                Parent root = loader.load();
+                ScrollPane scrollPane = new ScrollPane(root);
+                scrollPane.setFitToWidth(true);
+                scrollPane.setFitToHeight(false);
+                Scene scene = new Scene(scrollPane);
+
+                Stage newStage = new Stage();
+                if (undecorated) {
+                    newStage.initStyle(StageStyle.UNDECORATED);
+                }
+                newStage.setScene(scene);
+
+                String[] dims = selectedRes.split("x");
+                newStage.setWidth(Integer.parseInt(dims[0]));
+                newStage.setHeight(Integer.parseInt(dims[1]));
+                newStage.setMaximized(maximized);
+                newStage.centerOnScreen();
+
+                newStage.show();
+                System.out.println("新視窗已成功建立");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            dialog.close();
+        });
+
+        // 背景執行按鈕
+        Button backgroundBtn = new Button("背景執行");
+        backgroundBtn.setOnAction(e -> {
+            stage.hide();//隱藏主畫面
+            dialog.close();//關閉設定頁面
+        });
+
+        //關閉系統
+        Button exitButton = new Button("結束程式");
+        exitButton.setOnAction(e -> {
+            // 儲存任務資料
+            Persistence.saveTasks(getTaskList());
+            Persistence.saveWindowSettings(saveState(stage));
+            System.out.println("💾 資料已保存");
+            Platform.exit();
+            System.exit(0);
+        });
+
+        // 加入所有控制元件
+        content.getChildren().addAll(maximizeCheckBox,resolutionBox,undecoratedCheckBox,backgroundBtn,applyButton,exitButton);
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.getDialogPane().setContent(content);
+        dialog.showAndWait();
     }
 
 
