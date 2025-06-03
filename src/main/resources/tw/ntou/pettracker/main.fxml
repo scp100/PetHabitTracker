@@ -44,7 +44,7 @@
               <Button fx:id="achievementButton" text="🏆" styleClass="icon-button">
                 <tooltip><Tooltip text="成就系統"/></tooltip>
               </Button>
-              <Button fx:id="settingsBtn" text="⚙️" styleClass="icon-button">
+              <Button fx:id="settingsBtn" text="⚙️" styleClass="icon-button"  onAction="#onSettingsClicked">
                 <tooltip><Tooltip text="設定"/></tooltip>
               </Button>
             </HBox>
@@ -283,15 +283,6 @@
                        styleClass="loading-indicator"
                        StackPane.alignment="CENTER"/>
 
-    <!-- 疊加顯示：浮動 + 按鈕 -->
-    <Button fx:id="plusBtn"
-            text="+"
-            styleClass="fab"
-            onAction="#onFocusInput"
-            StackPane.alignment="BOTTOM_RIGHT">
-      <StackPane.margin>
-        <Insets bottom="30" right="30"/>
-      </StackPane.margin>
-    </Button>
+
   </children>
 </StackPane>
