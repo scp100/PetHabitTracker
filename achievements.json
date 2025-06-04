@@ -45,7 +45,7 @@
   "unlocked" : false
 }, {
   "id" : "early_bird",
-  "unlocked" : true
+  "unlocked" : false
 }, {
   "id" : "night_owl",
   "unlocked" : false
