@@ -219,7 +219,7 @@ public class MainController implements Initializable {
 
         // 初始化寵物控制器
         petController = new PetController(pet, satisfactionBar, fullnessBar,
-                satisfactionLabel, fullnessLabel);
+                satisfactionLabel, fullnessLabel,achievementController);
         petController.setAnimationController(animationController);
         petController.setFeedButton(feedPetBtn);
         petController.setPlayButton(playWithPetBtn,playChanceLabel);
@@ -252,6 +252,7 @@ public class MainController implements Initializable {
         achievementController.setAchievementButton(achievementButton);
         achievementController.setStreakLabel(streakLabel);
         achievementController.setNotificationService(notificationService);
+        petController.setAchievementController(achievementController);
 
         // 初始化主題控制器
         themeController = new ThemeController();
