@@ -745,8 +745,8 @@ public class MainController implements Initializable {
             setting.setUndecorated(undecorated);
             Persistence.saveWindowSettings(setting);
             Persistence.saveTasks(getTaskList());
-            Persistence.saveWindowSettings(saveState(stage));
             System.out.println("💾 資料已保存");
+            
             // 關閉目前視窗
             stage.close();
 
