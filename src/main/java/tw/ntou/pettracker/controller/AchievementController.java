@@ -85,6 +85,7 @@ public class AchievementController {
         checkAndUnlockAchievement("task_10", (int) maxCompletedCount);
         checkAndUnlockAchievement("task_50", (int) maxCompletedCount);
         checkAndUnlockAchievement("task_100", (int) maxCompletedCount);
+        checkAndUnlockAchievement("task_500", (int) maxCompletedCount);
 
         long highPriorityCompleted = tasks.stream()
                 .filter(Task::isDone)
@@ -103,6 +104,7 @@ public class AchievementController {
         checkAndUnlockAchievement("streak_3", currentStreak);
         checkAndUnlockAchievement("streak_7", currentStreak);
         checkAndUnlockAchievement("streak_30", currentStreak);
+        checkAndUnlockAchievement("streak_100", currentStreak);
     }
 
     /**
@@ -140,12 +142,16 @@ public class AchievementController {
     /**
      * 檢查寵物相關成就
      */
-    public void checkPetAchievements(int satisfaction, int fullness) {
-        if (satisfaction >= 100) {
-            checkAndUnlockAchievement("pet_happy", 1);
-        }
+
+    public void checkFeedingAchievement(int fullness){
         if (fullness >= 100) {
-            checkAndUnlockAchievement("pet_full", 1);
+            checkAndUnlockAchievement("pet_full", (int)1);
+        }
+    }
+
+    public void checksatisfactionAchievements(int satisfaction) {
+        if (satisfaction >= 100) {
+            checkAndUnlockAchievement("pet_happy", (int)1);
         }
     }
 
