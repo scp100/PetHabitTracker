@@ -697,7 +697,7 @@ public class MainController implements Initializable {
 
     public void shutdown() {
         Persistence.saveTasks(tasks);
-        notificationService.shutdown();
+        notificationService.exitApplication();
     }
 
     @FXML
@@ -793,8 +793,11 @@ public class MainController implements Initializable {
             Persistence.saveTasks(getTaskList());
             Persistence.saveWindowSettings(saveState(stage));
             System.out.println("💾 資料已保存");
+
             Platform.exit();
             System.exit(0);
+
+
         });
 
         // 加入所有控制元件

@@ -1,6 +1,6 @@
 [ {
   "id" : "first_task",
-  "unlocked" : false
+  "unlocked" : true
 }, {
   "id" : "task_10",
   "unlocked" : false

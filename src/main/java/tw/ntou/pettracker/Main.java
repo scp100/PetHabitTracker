@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.ScrollPane;
 import tw.ntou.pettracker.service.AchievementManager;
 import tw.ntou.pettracker.model.WindowSetting;
+import tw.ntou.pettracker.service.NotificationService;
 
 public class Main extends Application {
     @Override
@@ -35,16 +36,23 @@ public class Main extends Application {
             // 獲取控制器並設定關閉事件
             MainController controller = loader.getController();
 
+            NotificationService notificationService = NotificationService.getInstance();
+
+
             Persistence.loadAchievementsStatus(AchievementManager.getAllAchievements());
             System.out.println("成就載入完畢");
 
             primaryStage.setOnCloseRequest(e -> {
+
+                e.consume();
+
                 Persistence.saveTasks(controller.getTaskList());
                 Persistence.saveAchievementsStatus(AchievementManager.getAllAchievements());
                 System.out.println("💾 資料已保存");
 
-                javafx.application.Platform.exit();
-                System.exit(0);
+                primaryStage.hide();
+
+                notificationService.minimizeToTray();
             });
 
             // 設定窗口屬性

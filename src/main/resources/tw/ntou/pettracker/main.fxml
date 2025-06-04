@@ -44,7 +44,7 @@
               <Button fx:id="achievementButton" text="🏆" styleClass="icon-button">
                 <tooltip><Tooltip text="成就系統"/></tooltip>
               </Button>
-              <Button fx:id="settingsBtn" text="⚙️" styleClass="icon-button"  onAction="#onSettingsClicked">
+              <Button fx:id="settingsBtn" text="⚙" styleClass="icon-button"  onAction="#onSettingsClicked">
                 <tooltip><Tooltip text="設定"/></tooltip>
               </Button>
             </HBox>
