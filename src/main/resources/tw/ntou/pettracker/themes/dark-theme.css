@@ -195,3 +195,6 @@
 .empty-placeholder {
     -fx-text-fill: #6c757d;
 }
+.scroll-pane .viewport {
+    -fx-background-color: #212529;
+}
