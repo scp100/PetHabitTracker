@@ -268,6 +268,7 @@
                       styleClass="pet-action-btn" prefWidth="200"/>
               <Button fx:id="playWithPetBtn" text="🎾 玩耍"
                       styleClass="pet-action-btn" prefWidth="200"/>
+              <Label fx:id="playChanceLabel" text="剩餘玩耍次數：0"  style="-fx-background-color: white; -fx-padding: 5;"/>
             </VBox>
 
           </VBox>
