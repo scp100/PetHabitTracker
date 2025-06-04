@@ -17,6 +17,7 @@ import tw.ntou.pettracker.service.PetVideoService.PetVideo;
 import tw.ntou.pettracker.util.MessageUtil;
 import tw.ntou.pettracker.util.PetVideoGalleryDialog;
 
+
 import java.io.File;
 import java.time.LocalDate;
 
@@ -33,6 +34,7 @@ public class PetController {
     private Button feedButton;
     private Button playButton;
     private Label playChanceLabel;
+    private AchievementController achievementController;
 
     // 處理影片播放的服務
     private final PetVideoService videoService = PetVideoService.getInstance();
@@ -42,12 +44,14 @@ public class PetController {
                          ProgressBar satisfactionBar,
                          ProgressBar fullnessBar,
                          Label satisfactionLabel,
-                         Label fullnessLabel) {
+                         Label fullnessLabel,
+                         AchievementController achievementController) {
         this.pet = pet;
         this.satisfactionBar = satisfactionBar;
         this.fullnessBar = fullnessBar;
         this.satisfactionLabel = satisfactionLabel;
         this.fullnessLabel = fullnessLabel;
+        this.achievementController = achievementController;
 
         bindPetStats();
     }
@@ -119,8 +123,8 @@ public class PetController {
         if (video != null && petMediaView != null) {
             playVideoOnMediaView(video);
         }
-
         checkFeedingAchievement();
+        checkPlayAchievement();
     }
 
     /**
@@ -221,16 +225,18 @@ public class PetController {
     }
 
     private void checkFeedingAchievement() {
+        System.out.println(pet.getFullness());
         if (pet.getFullness() >= 100) {
-            // 觸發「美食家」成就
-
+            System.out.println(pet.getFullness());
+            achievementController.checkFeedingAchievement(pet.getFullness());
         }
     }
 
     private void checkPlayAchievement() {
         if (pet.getSatisfaction() >= 100) {
             // 觸發「快樂夥伴」成就
-
+            System.out.println(pet.getFullness());
+            achievementController.checksatisfactionAchievements(pet.getSatisfaction());
         }
     }
 
@@ -330,5 +336,9 @@ public class PetController {
         if (playChanceLabel != null) {
             playChanceLabel.setText("剩餘玩耍次數：" + pet.getPlayChances());
         }
+    }
+
+    public void setAchievementController(AchievementController achievementController){
+        this.achievementController =achievementController;
     }
 }
